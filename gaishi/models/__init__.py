@@ -19,3 +19,4 @@
 
 from .ml_model import MlModel
 from .lr_model import LrModel
+from .etc_model import EtcModel
