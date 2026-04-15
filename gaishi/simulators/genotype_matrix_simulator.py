@@ -143,9 +143,9 @@ class GenotypeMatrixSimulator(GenericSimulator):
         self.output_h5 = output_h5
 
         if is_phased:
-            nref *= ploidy
-            ntgt *= ploidy
-        num_samples_padded = ((max(nref, ntgt) + 15) // 16) * 16
+            num_samples_padded = ((max(nref*ploidy, ntgt*ploidy) + 15) // 16) * 16
+        else:
+            num_samples_padded = ((max(nref, ntgt) + 15) // 16) * 16
 
         os.makedirs(output_dir, exist_ok=True)
         if self.output_h5:
@@ -164,6 +164,15 @@ class GenotypeMatrixSimulator(GenericSimulator):
                     [f"tsk_{i}" for i in range(nref, nref + ntgt)], ploidy, is_phased
                 ),
             )
+            
+            #ref_samples = create_sample_name_list(
+            #        [f"tsk_{i}" for i in range(nref)], ploidy, is_phased
+            #)
+            #tgt_samples = create_sample_name_list(
+            #        [f"tsk_{i}" for i in range(nref, nref + ntgt)], ploidy, is_phased
+            #)
+            #print(ref_samples)
+            #print(tgt_samples)
         else:
             self.output = os.path.join(output_dir, f"{output_prefix}.tsv")
             with open(self.output, "w") as f:
