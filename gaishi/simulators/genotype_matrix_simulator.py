@@ -164,15 +164,6 @@ class GenotypeMatrixSimulator(GenericSimulator):
                     [f"tsk_{i}" for i in range(nref, nref + ntgt)], ploidy, is_phased
                 ),
             )
-            
-            #ref_samples = create_sample_name_list(
-            #        [f"tsk_{i}" for i in range(nref)], ploidy, is_phased
-            #)
-            #tgt_samples = create_sample_name_list(
-            #        [f"tsk_{i}" for i in range(nref, nref + ntgt)], ploidy, is_phased
-            #)
-            #print(ref_samples)
-            #print(tgt_samples)
         else:
             self.output = os.path.join(output_dir, f"{output_prefix}.tsv")
             with open(self.output, "w") as f:
