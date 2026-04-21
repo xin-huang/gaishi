@@ -304,7 +304,6 @@ class UNetModel(MlModel):
                 if early_count >= int(n_early):
                     add_msg = f" Early stopping; best weights at epoch {best_epoch} reloaded."
                     net.load_state_dict(torch.load(output, map_location="cpu"))
-                    break
             validation_log_file.write(log_msg + add_msg + "\n")
             validation_log_file.flush()
 
