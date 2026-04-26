@@ -290,21 +290,21 @@ class UNetModel(MlModel):
             val_acc = np.mean(val_accs)
 
             log_msg = f"Epoch {epoch_idx}: validation loss = {val_loss}, validation accuracy = {val_acc}."
+            add_msg = ""
 
             improved = (min_val_loss - val_loss) > float(min_delta)
             if improved:
                 min_val_loss = val_loss
                 best_epoch = epoch_idx
-                log_msg += f" Best weights saved.\n"
+                add_msg = " Best weights saved."
                 torch.save(net.state_dict(), output)
                 early_count = 0
             else:
                 early_count += 1
                 if early_count >= int(n_early):
-                    log_msg += f" Early stopping; best weights at epoch {best_epoch} reloaded.\n"
+                    add_msg = f" Early stopping; best weights at epoch {best_epoch} reloaded."
                     net.load_state_dict(torch.load(output, map_location="cpu"))
-                    break
-            validation_log_file.write(log_msg)
+            validation_log_file.write(log_msg + add_msg + "\n")
             validation_log_file.flush()
 
         training_log_file.flush()
