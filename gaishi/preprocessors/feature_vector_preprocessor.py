@@ -193,8 +193,8 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
             if "private_mutation" in res.keys():
                 sample_dict["Private_mutation"] = res["private_mutation"][i]
             if "spectrum" in res.keys():
-                for j in range(num_samples + 1):
-                    sample_dict[f"{j}_ton"] = res["spectrum"][i][j]
+                for j, value in enumerate(res["spectrum"][i]):
+                    sample_dict[f"{j}_ton"] = value
 
             for pop in ["ref", "tgt"]:
                 if f"{pop}_dist" in self.feature_config.root.keys():
