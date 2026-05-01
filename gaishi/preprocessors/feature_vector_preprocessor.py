@@ -17,7 +17,7 @@
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
 
-import scipy, yaml
+import yaml
 import numpy as np
 from typing import Any
 from gaishi.configs import FeatureConfig
@@ -62,7 +62,7 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
                 config_dict = yaml.safe_load(f)
         except FileNotFoundError:
             raise FileNotFoundError(
-                f"Feature configuration file {feature_config} not found."
+                f"Feature configuration file {feature_config_file} not found."
             )
         except yaml.YAMLError as exc:
             raise ValueError(f"Error parsing feature configuration: {exc}")
@@ -182,7 +182,7 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
         sample_dicts = [base_dict.copy() for _ in range(num_samples)]
         for i, sample_dict in enumerate(sample_dicts):
             sample = (
-                f'{self.samples["tgt"][int(i/ploidy)]}_{i%ploidy+1}'
+                f'{self.samples["tgt"][i//ploidy]}_{i%ploidy+1}'
                 if is_phased
                 else self.samples["tgt"][i]
             )
@@ -193,8 +193,8 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
             if "private_mutation" in res.keys():
                 sample_dict["Private_mutation"] = res["private_mutation"][i]
             if "spectrum" in res.keys():
-                for j in range(num_samples + 1):
-                    sample_dict[f"{j}_ton"] = res["spectrum"][i][j]
+                for j, value in enumerate(res["spectrum"][i]):
+                    sample_dict[f"{j}_ton"] = value
 
             for pop in ["ref", "tgt"]:
                 if f"{pop}_dist" in self.feature_config.root.keys():
@@ -264,6 +264,6 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
             else:
                 for j in range(len(row[f"All_{pop}_dist"][idx])):
                     sample = self.samples[pop][j]
-                    items[f"{pop}_dist_{sample}"] = row[f"All_{pop}_dists"][idx][j]
+                    items[f"{pop}_dist_{sample}"] = row[f"All_{pop}_dist"][idx][j]
 
         return items

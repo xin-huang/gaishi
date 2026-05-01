@@ -59,7 +59,7 @@ def _gaishi_cli_parser() -> argparse.ArgumentParser:
 
 def main(arg_list: list = None) -> None:
     """
-    Main entry for gaigar.
+    Main entry for gaishi.
 
     Parameters
     ----------
