@@ -22,3 +22,4 @@ dependencies:
   - pip:
       - seriate==1.1.2
       - torch==2.2.0
+      - safetensors==0.4.5

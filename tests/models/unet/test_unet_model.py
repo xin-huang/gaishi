@@ -23,6 +23,7 @@ import numpy as np
 import os, pytest, torch
 import torch.nn as nn
 import gaishi.models.unet.unet_model as unet_mod
+from safetensors.torch import save_file
 
 
 class DummyUNetPlusPlus(nn.Module):
@@ -162,7 +163,7 @@ def test_train_branch_unetplusplus_two_channel(tmp_path, monkeypatch) -> None:
     training_data = _make_training_h5(tmp_path, n_reps=40, N=2, L=7, with_gaps=True)
 
     model_dir = tmp_path / "model_out"
-    model_path = model_dir / "best.pth"
+    model_path = model_dir / "best.safetensors"
 
     unet_mod.UNetModel.train(
         data=training_data,
@@ -184,7 +185,7 @@ def test_train_branch_unetplusplus_two_channel(tmp_path, monkeypatch) -> None:
 
     assert (model_dir / "training.log").exists()
     assert (model_dir / "validation.log").exists()
-    assert (model_dir / "best.pth").exists()
+    assert (model_dir / "best.safetensors").exists()
 
 
 def test_train_branch_neighbor_gap_fusion_four_channel(tmp_path, monkeypatch) -> None:
@@ -197,7 +198,7 @@ def test_train_branch_neighbor_gap_fusion_four_channel(tmp_path, monkeypatch) ->
     training_data = _make_training_h5(tmp_path, n_reps=40, N=3, L=11, with_gaps=True)
 
     model_dir = tmp_path / "model_out2"
-    model_path = model_dir / "best.pth"
+    model_path = model_dir / "best.safetensors"
 
     unet_mod.UNetModel.train(
         data=training_data,
@@ -225,7 +226,7 @@ def test_train_raises_when_add_rnn_true_but_missing_gap_datasets(
     training_data = _make_training_h5(tmp_path, n_reps=40, N=2, L=7, with_gaps=False)
 
     model_dir = tmp_path / "model_out3"
-    model_path = model_dir / "best.pth"
+    model_path = model_dir / "best.safetensors"
 
     # Your current pipeline will fail when trying to build 4-channel inputs without gap datasets.
     with pytest.raises(KeyError, match="Gap_to_prev|Gap_to_next"):
@@ -250,7 +251,7 @@ def test_train_raises_when_no_positive_class(tmp_path, monkeypatch) -> None:
     )
 
     model_dir = tmp_path / "model_out5"
-    model_path = model_dir / "best.pth"
+    model_path = model_dir / "best.safetensors"
 
     with pytest.raises(ValueError, match="no positive class"):
         unet_mod.UNetModel.train(
@@ -306,7 +307,7 @@ class DummyUNetPlusPlusRNN2(nn.Module):
 
 def _save_weights(tmp_path, model, filename) -> str:
     weights_path = tmp_path / filename
-    torch.save(model.state_dict(), str(weights_path))
+    save_file(model.state_dict(), str(weights_path))
 
     return str(weights_path)
 

@@ -24,6 +24,7 @@ from typing import Optional
 import numpy as np
 import torch
 import torch.optim as optim
+from safetensors.torch import load_file, save_file
 from scipy.special import expit
 from sklearn.metrics import accuracy_score
 from torch.nn import BCEWithLogitsLoss
@@ -221,7 +222,7 @@ class UNetModel(MlModel):
         net = net.to(device)
 
         if trained_model_file is not None:
-            checkpoint = torch.load(trained_model_file, map_location=device)
+            checkpoint = load_file(trained_model_file, device=device)
             net.load_state_dict(checkpoint)
 
         criterion = BCEWithLogitsLoss(pos_weight=torch.FloatTensor([ratio]).to(device))
@@ -297,7 +298,7 @@ class UNetModel(MlModel):
                 min_val_loss = val_loss
                 best_epoch = epoch_idx
                 add_msg = " Best weights saved."
-                torch.save(net.state_dict(), output)
+                save_file(net.state_dict(), output)
                 early_count = 0
             else:
                 early_count += 1
@@ -305,7 +306,7 @@ class UNetModel(MlModel):
                     add_msg = (
                         f" Early stopping; best weights at epoch {best_epoch} reloaded."
                     )
-                    net.load_state_dict(torch.load(output, map_location="cpu"))
+                    net.load_state_dict(load_file(output, device="cpu"))
             validation_log_file.write(log_msg + add_msg + "\n")
             validation_log_file.flush()
 
@@ -352,7 +353,7 @@ class UNetModel(MlModel):
         data : str
             Path to the input HDF5 file in the unified schema.
         model : str
-            Path to a PyTorch ``state_dict`` checkpoint (e.g. ``best.pth``).
+            Path to a ``.safetensors`` checkpoint (e.g. ``best.safetensors``).
         output : str
             Path to the output file.
         add_rnn : bool, optional
@@ -437,7 +438,7 @@ class UNetModel(MlModel):
                 net = UNetPlusPlus(num_classes=n_classes, input_channels=2)
                 input_channels = 2
 
-            ckpt = torch.load(model, map_location=dev)
+            ckpt = load_file(model, device=str(dev))
             net.load_state_dict(ckpt)
             net.to(dev)
             net.eval()
