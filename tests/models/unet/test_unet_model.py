@@ -23,6 +23,7 @@ import numpy as np
 import os, pytest, torch
 import torch.nn as nn
 import gaishi.models.unet.unet_model as unet_mod
+from safetensors.torch import save_file
 
 
 class DummyUNetPlusPlus(nn.Module):
@@ -306,7 +307,7 @@ class DummyUNetPlusPlusRNN2(nn.Module):
 
 def _save_weights(tmp_path, model, filename) -> str:
     weights_path = tmp_path / filename
-    torch.save(model.state_dict(), str(weights_path))
+    save_file(model.state_dict(), str(weights_path))
 
     return str(weights_path)
 
