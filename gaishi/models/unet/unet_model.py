@@ -302,7 +302,9 @@ class UNetModel(MlModel):
             else:
                 early_count += 1
                 if early_count >= int(n_early):
-                    add_msg = f" Early stopping; best weights at epoch {best_epoch} reloaded."
+                    add_msg = (
+                        f" Early stopping; best weights at epoch {best_epoch} reloaded."
+                    )
                     net.load_state_dict(torch.load(output, map_location="cpu"))
             validation_log_file.write(log_msg + add_msg + "\n")
             validation_log_file.flush()
@@ -388,6 +390,7 @@ class UNetModel(MlModel):
             meta = f["/meta"]
             n = meta.attrs["n"]  # number of genotype matrices
             L = meta.attrs["L"]
+            chrom = meta.attrs["Chromosome"]
 
             # required for table
             pos_ds = f["/coords/Position"]  # (n, L)
@@ -496,29 +499,31 @@ class UNetModel(MlModel):
             prob[mask] = _sigmoid(mean_logits[mask, 0]).astype(np.float32, copy=False)
 
             with open(output, "w", newline="") as out:
-                out.write("sample\tposition\tprob\n")
+                out.write("Chromosome\tPosition\tSample\tNon_Intro_Prob\tIntro_Prob\n")
                 for sid, name in enumerate(tgt_names):
                     for j in range(P):
-                        out.write(f"{name}\t{int(uniq_pos[j])}\t{prob[sid, j]}\n")
-        else:
-            prob = np.full((H, P, n_classes), np.nan, dtype=np.float32)
-            # mean_logits[mask] has shape (K, C); class axis is 1
-            prob[mask] = _softmax(mean_logits[mask], axis=1).astype(
-                np.float32, copy=False
-            )
-
-            with open(output, "w", newline="") as out:
-                out.write(
-                    "sample\tposition\t"
-                    + "\t".join([f"prob_{c}" for c in range(n_classes)])
-                    + "\n"
-                )
-                for sid, name in enumerate(tgt_names):
-                    for j in range(P):
-                        probs = "\t".join(
-                            str(float(prob[sid, j, c])) for c in range(n_classes)
+                        out.write(
+                            f"{chrom}\t{int(uniq_pos[j])}\t{name}\t{1-prob[sid, j]}\t{prob[sid, j]}\n"
                         )
-                        out.write(f"{name}\t{int(uniq_pos[j])}\t{probs}\n")
+        # else:
+        #    prob = np.full((H, P, n_classes), np.nan, dtype=np.float32)
+        #    # mean_logits[mask] has shape (K, C); class axis is 1
+        #    prob[mask] = _softmax(mean_logits[mask], axis=1).astype(
+        #        np.float32, copy=False
+        #    )
+        #
+        #    with open(output, "w", newline="") as out:
+        #        out.write(
+        #            "sample\tposition\t"
+        #            + "\t".join([f"prob_{c}" for c in range(n_classes)])
+        #            + "\n"
+        #        )
+        #        for sid, name in enumerate(tgt_names):
+        #            for j in range(P):
+        #                probs = "\t".join(
+        #                    str(float(prob[sid, j, c])) for c in range(n_classes)
+        #                )
+        #                out.write(f"{name}\t{int(uniq_pos[j])}\t{probs}\n")
 
 
 def _read_str_table_1d(ds) -> list[str]:

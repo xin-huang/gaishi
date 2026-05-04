@@ -417,19 +417,30 @@ def _gauss_weights(L: int, sigma: float) -> np.ndarray:
 
 def _read_prob_table(path: str) -> dict[tuple[str, int], list[float]]:
     """
-    Returns mapping (sample, position) -> [prob...] (len=1 for binary, len=C for multiclass)
+    Returns mapping (sample, position) -> [Non_Intro_Prob, Intro_Prob]
     """
     out: dict[tuple[str, int], list[float]] = {}
+
     with open(path, "r", newline="") as fp:
         header = fp.readline().rstrip("\n").split("\t")
-        prob_cols = [i for i, c in enumerate(header) if c.startswith("prob")]
+        col = {name: i for i, name in enumerate(header)}
+
+        sample_col = col["Sample"]
+        pos_col = col["Position"]
+        prob_cols = col["Intro_Prob"]
+
         for line in fp:
-            s, p, *rest = line.rstrip("\n").split("\t")
-            pos = int(p)
-            probs = [
-                float(rest[i - 2]) for i in prob_cols
-            ]  # header: sample position prob...
-            out[(s, pos)] = probs
+            if not line.strip():
+                continue
+
+            fields = line.rstrip("\n").split("\t")
+
+            sample = fields[sample_col]
+            pos = int(fields[pos_col])
+            probs = float(fields[prob_cols])
+
+            out[(sample, pos)] = probs
+
     return out
 
 
@@ -453,13 +464,13 @@ def test_infer_unetplusplus_two_channel_outputs_table_binary(
     # For A at pos=102:
     # window0 contributes t=2 value=3 twice; window1 contributes t=0 value=6 twice => mean = (2*3 + 2*6)/4 = 4.5
     exp_A_102 = _sigmoid_scalar(4.5)
-    got_A_102 = tab[("A", 102)][0]
+    got_A_102 = tab[("A", 102)]
     assert got_A_102 == pytest.approx(exp_A_102, rel=1e-6, abs=1e-6)
 
     # For B at pos=102:
     # window0 t=2 value=13 once; window1 t=0 value=16 once => mean=14.5
     exp_B_102 = _sigmoid_scalar(14.5)
-    got_B_102 = tab[("B", 102)][0]
+    got_B_102 = tab[("B", 102)]
     assert got_B_102 == pytest.approx(exp_B_102, rel=1e-6, abs=1e-6)
 
 
@@ -481,8 +492,8 @@ def test_infer_unet_rnn_four_channel_outputs_table_binary(
 
     tab = _read_prob_table(out)
     # same expected as above
-    assert tab[("A", 102)][0] == pytest.approx(_sigmoid_scalar(4.5), rel=1e-6, abs=1e-6)
-    assert tab[("B", 102)][0] == pytest.approx(
+    assert tab[("A", 102)] == pytest.approx(_sigmoid_scalar(4.5), rel=1e-6, abs=1e-6)
+    assert tab[("B", 102)] == pytest.approx(
         _sigmoid_scalar(14.5), rel=1e-6, abs=1e-6
     )
 
@@ -544,5 +555,5 @@ def test_infer_site_weighting_changes_overlap_result(tmp_path, monkeypatch) -> N
     den = 2 * w_center + 2 * w_edge
     exp = _sigmoid_scalar(num / den)
 
-    assert t1[("A", 102)][0] == pytest.approx(exp, rel=1e-6, abs=1e-6)
-    assert t1[("A", 102)][0] != pytest.approx(t0[("A", 102)][0], rel=1e-9, abs=1e-9)
+    assert t1[("A", 102)] == pytest.approx(exp, rel=1e-6, abs=1e-6)
+    assert t1[("A", 102)] != pytest.approx(t0[("A", 102)], rel=1e-9, abs=1e-9)

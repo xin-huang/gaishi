@@ -57,7 +57,8 @@ def genotype_matrix_init_params(tmp_path):
         "tgt_ind_file": os.path.join(expected_dir, "test.0.tgt.ind.list"),
         "anc_allele_file": None,
         "chr_name": "1",
-        "output_file": str(output_dir / "test.h5"),
+        "output_dir": str(output_dir),
+        "output_prefix": "test",
         "num_polymorphisms": 5,
         "step_size": 5,
         "ploidy": 2,
@@ -93,7 +94,9 @@ def test_preprocess_feature_vectors(feature_vector_init_params):
 def test_preprocess_genotype_matrices(genotype_matrix_init_params):
     preprocess_genotype_matrices(**genotype_matrix_init_params)
 
-    with h5py.File(genotype_matrix_init_params["output_file"], "r") as f:
+    output_file = f"{genotype_matrix_init_params['output_dir']}/{genotype_matrix_init_params['output_prefix']}.h5"
+
+    with h5py.File(output_file, "r") as f:
         # Meta
         assert "/meta" in f
         meta = f["/meta"]
