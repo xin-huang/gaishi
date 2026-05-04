@@ -27,4 +27,5 @@ dependencies:
       - ortools==8.2.8710
       - git+https://github.com/xin-huang/seriate.git@dev
       - torch==2.2.0
+      - safetensors==0.4.5
       - -e .
