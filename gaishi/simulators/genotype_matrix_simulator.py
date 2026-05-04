@@ -143,7 +143,7 @@ class GenotypeMatrixSimulator(GenericSimulator):
         self.output_h5 = output_h5
 
         if is_phased:
-            num_samples_padded = ((max(nref*ploidy, ntgt*ploidy) + 15) // 16) * 16
+            num_samples_padded = ((max(nref * ploidy, ntgt * ploidy) + 15) // 16) * 16
         else:
             num_samples_padded = ((max(nref, ntgt) + 15) // 16) * 16
 

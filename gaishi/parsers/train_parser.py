@@ -32,10 +32,14 @@ def _run_train(args: argparse.Namespace) -> None:
     args : argparse.Namespace
         A namespace object obtained from argparse, containing specified parameters.
     """
+    if not args.only_simulation and args.output is None:
+        raise ValueError("`--output` is required unless `--only-simulation` is set.")
+
     train(
         demes=args.demes,
         config=args.config,
         output=args.output,
+        only_simulation=args.only_simulation,
     )
 
 
@@ -66,7 +70,12 @@ def add_train_parser(subparsers: argparse.ArgumentParser) -> None:
     )
     parser.add_argument(
         "--output",
-        required=True,
+        default=None,
         help="Path to the output file.",
+    )
+    parser.add_argument(
+        "--only-simulation",
+        action="store_true",
+        help="Only run simulation and skip model training.",
     )
     parser.set_defaults(runner=_run_train)
