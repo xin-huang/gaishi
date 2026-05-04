@@ -19,6 +19,7 @@
 
 import os
 import yaml
+from typing import Optional
 from gaishi.configs import GlobalConfig
 from gaishi.registries.model_registry import MODEL_REGISTRY
 from gaishi.simulate import simulate_feature_vectors
@@ -29,7 +30,8 @@ from gaishi.utils import UniqueKeyLoader
 def train(
     demes: str,
     config: str,
-    output: str,
+    output: Optional[str] = None,
+    only_simulation: bool = False,
 ) -> None:
     """
     Run simulation and model training from YAML configuration.
@@ -40,9 +42,13 @@ def train(
         Path to the demography (demes) YAML file used for simulation.
     config : str
         Path to the gaishi configuration YAML file.
-    output : str
+    output : str, optional
         Output path or directory passed to the model's `train` method, used
-        to store the trained model.
+        to store the trained model. Required when `only_simulation=False`.
+        Default: None.
+    only_simulation : bool, optional
+        If True, run simulation checks/simulation only and skip model
+        training. Default: False.
     """
     try:
         with open(config, "r") as f:
@@ -69,6 +75,11 @@ def train(
                 demo_model_file=demes,
                 **global_config.simulation.model_dump(),
             )
+
+    if only_simulation:
+        return
+    if output is None:
+        raise ValueError("`output` is required unless `only_simulation=True`.")
 
     model_name = global_config.model.name
     model_params = global_config.model.params

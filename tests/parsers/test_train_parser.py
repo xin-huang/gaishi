@@ -20,7 +20,7 @@
 
 import pytest
 import argparse
-from gaishi.parsers.train_parser import add_train_parser
+from gaishi.parsers.train_parser import _run_train, add_train_parser
 
 
 @pytest.fixture
@@ -51,3 +51,31 @@ def test_add_score_parser(parser):
     assert args.demes == "tests/data/ArchIE_3D19.yaml"
     assert args.config == "tests/data/ArchIE.features.yaml"
     assert args.output == "output/results.tsv"
+
+
+def test_train_parser_allows_missing_output_with_only_simulation(parser):
+    args = parser.parse_args(
+        [
+            "train",
+            "--demes",
+            "tests/data/ArchIE_3D19.yaml",
+            "--config",
+            "tests/data/ArchIE.features.yaml",
+            "--only-simulation",
+        ]
+    )
+
+    assert args.only_simulation is True
+    assert args.output is None
+
+
+def test_run_train_requires_output_without_only_simulation():
+    args = argparse.Namespace(
+        demes="tests/data/ArchIE_3D19.yaml",
+        config="tests/data/ArchIE.features.yaml",
+        output=None,
+        only_simulation=False,
+    )
+
+    with pytest.raises(ValueError, match="--output"):
+        _run_train(args)

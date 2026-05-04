@@ -493,9 +493,7 @@ def test_infer_unet_rnn_four_channel_outputs_table_binary(
     tab = _read_prob_table(out)
     # same expected as above
     assert tab[("A", 102)] == pytest.approx(_sigmoid_scalar(4.5), rel=1e-6, abs=1e-6)
-    assert tab[("B", 102)] == pytest.approx(
-        _sigmoid_scalar(14.5), rel=1e-6, abs=1e-6
-    )
+    assert tab[("B", 102)] == pytest.approx(_sigmoid_scalar(14.5), rel=1e-6, abs=1e-6)
 
 
 def test_infer_raises_when_add_rnn_true_but_missing_gap_datasets(

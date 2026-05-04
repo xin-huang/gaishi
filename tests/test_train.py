@@ -61,3 +61,14 @@ def test_train(file_paths, cleanup_output_dir):
     ), "Model coefficient shapes do not match."
     # assert all(abs(a - b) < tolerance for a, b in zip(model.coef_.flatten(), expected_model.coef_.flatten())), "Coefficients do not match within tolerance."
     # assert abs(model.intercept_ - expected_model.intercept_) < tolerance
+
+
+def test_train_only_simulation(file_paths, cleanup_output_dir):
+    train(
+        demes=file_paths["demes"],
+        config=file_paths["config"],
+        output=file_paths["output"],
+        only_simulation=True,
+    )
+
+    assert not os.path.exists(file_paths["output"])
