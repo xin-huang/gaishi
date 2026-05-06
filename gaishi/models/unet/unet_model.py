@@ -66,6 +66,7 @@ class UNetModel(MlModel):
         val_prop: float = 0.05,
         seed: int = None,
         device: str = None,
+        num_workers: int = 0,
         **kwargs,
     ) -> None:
         """
@@ -151,6 +152,9 @@ class UNetModel(MlModel):
             Default: None.
         device : Optional[str].
             Force device string like ``"cuda:0"`` or ``"cpu"``. Default: None.
+        num_workers : int, optional
+            Number of DataLoader worker processes used for training/validation
+            loaders. Default: 0.
 
         Raises
         ------
@@ -158,6 +162,8 @@ class UNetModel(MlModel):
             If the HDF5 file contains no replicates.
         ValueError
             If training labels contain no positive class.
+        ValueError
+            If ``num_workers`` is not a non-negative integer.
         KeyError
             If required datasets are missing from the HDF5 file.
         """
@@ -182,6 +188,9 @@ class UNetModel(MlModel):
         if num_genotype_matrices == 0:
             raise ValueError(f"No genotype matrices found in HDF5 file: {data}")
 
+        if not isinstance(num_workers, int) or num_workers < 0:
+            raise ValueError("`num_workers` must be a non-negative integer.")
+
         input_channels = 4 if add_rnn else 2
 
         train_loader, val_loader, train_indices, val_indices = (
@@ -190,7 +199,7 @@ class UNetModel(MlModel):
                 channels=input_channels,
                 batch_size=batch_size,
                 val_prop=val_prop,
-                num_workers=0,
+                num_workers=num_workers,
                 pin_memory=torch.cuda.is_available(),
                 seed=seed,
                 train_label_smooth=True,

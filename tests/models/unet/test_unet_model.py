@@ -448,6 +448,28 @@ def _read_prob_table(path: str) -> dict[tuple[str, int], list[float]]:
     return out
 
 
+
+
+def test_train_raises_when_num_workers_is_negative(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+
+    training_data = _make_training_h5(tmp_path, n_reps=10, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_neg_workers" / "best.safetensors"
+
+    with pytest.raises(ValueError, match="non-negative integer"):
+        unet_mod.UNetModel.train(
+            data=training_data,
+            output=str(model_path),
+            add_rnn=False,
+            batch_size=2,
+            n_epochs=1,
+            n_early=0,
+            min_delta=0.0,
+            val_prop=0.2,
+            seed=0,
+            num_workers=-1,
+        )
 def test_infer_unetplusplus_two_channel_outputs_table_binary(
     tmp_path, monkeypatch
 ) -> None:
