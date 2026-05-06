@@ -174,10 +174,15 @@ class UNetModel(MlModel):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
         dev = torch.device(device)
+        log_dev = (
+            torch.device(f"cuda:{torch.cuda.current_device()}")
+            if dev.type == "cuda" and dev.index is None
+            else dev
+        )
 
         training_log_file = open(os.path.join(output_dir, "training.log"), "w")
         validation_log_file = open(os.path.join(output_dir, "validation.log"), "w")
-        training_log_file.write(f"device = {dev}\n")
+        training_log_file.write(f"device = {log_dev}\n")
         training_log_file.flush()
 
         # Read shapes from unified schema
