@@ -36,7 +36,7 @@ from gaishi.registries.model_registry import MODEL_REGISTRY
 from gaishi.models.unet.dataloader_h5 import build_dataloaders_from_h5
 
 
-@MODEL_REGISTRY.register("unet")
+@MODEL_REGISTRY.register("unet++")
 class UNetModel(MlModel):
     """
     UNet-based model wrapper for training and inference on HDF5 datasets.
@@ -171,6 +171,8 @@ class UNetModel(MlModel):
 
         training_log_file = open(os.path.join(output_dir, "training.log"), "w")
         validation_log_file = open(os.path.join(output_dir, "validation.log"), "w")
+        training_log_file.write(f"device = {dev}\n")
+        training_log_file.flush()
 
         # Read shapes from unified schema
         with h5py.File(data, "r") as f:

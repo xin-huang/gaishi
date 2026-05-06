@@ -19,7 +19,7 @@ simulation:
   nfeature: 100
 
 model:
-  name: "unet"
+  name: "unet++"
   params:
     add_channels: False,
     n_classes: 1,

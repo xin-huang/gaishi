@@ -183,9 +183,12 @@ def test_train_branch_unetplusplus_two_channel(tmp_path, monkeypatch) -> None:
     assert DummyUNetPlusPlus.last_init["input_channels"] == 2
     assert DummyUNetPlusPlusRNN.last_init is None
 
-    assert (model_dir / "training.log").exists()
+    training_log = model_dir / "training.log"
+    assert training_log.exists()
     assert (model_dir / "validation.log").exists()
     assert (model_dir / "best.safetensors").exists()
+
+    assert "device = cpu" in training_log.read_text()
 
 
 def test_train_branch_neighbor_gap_fusion_four_channel(tmp_path, monkeypatch) -> None:
