@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 from .generic_generator import GenericGenerator  # noqa: F401
 from .random_number_generator import RandomNumberGenerator  # noqa: F401

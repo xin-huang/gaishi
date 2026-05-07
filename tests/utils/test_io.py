@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 import copy, h5py
 import pytest
@@ -99,7 +98,7 @@ def test_write_tsv_appends_rows(tmp_path):
     assert lines == ["[1, 2]\t3", "[9, 8, 7]\t4"]
 
 
-def _read_str_1d(ds) -> list[str]:
+def _read_str_1d(ds):
     """Read a 1D h5py string dataset into Python strings."""
     out = []
     for x in ds[...]:
@@ -110,7 +109,7 @@ def _read_str_1d(ds) -> list[str]:
     return out
 
 
-def _assert_string_table(ds: h5py.Dataset, expected: list[str]) -> None:
+def _assert_string_table(ds, expected):
     # h5py vlen utf-8 strings often show up as dtype=object
     sdt = h5py.check_string_dtype(ds.dtype)
     assert sdt is not None

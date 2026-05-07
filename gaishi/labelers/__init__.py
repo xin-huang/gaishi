@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 from .generic_labeler import GenericLabeler  # noqa: F401
 from .binary_allele_labeler import BinaryAlleleLabeler  # noqa: F401

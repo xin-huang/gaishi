@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,7 +17,6 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 import h5py, math, pickle
 import numpy as np
 import os, pytest, torch
@@ -31,7 +30,7 @@ class DummyUNetPlusPlus(nn.Module):
 
     last_init = None
 
-    def __init__(self, num_classes: int, input_channels: int = 3):
+    def __init__(self, num_classes, input_channels=3):
         super().__init__()
         self.num_classes = int(num_classes)
         DummyUNetPlusPlus.last_init = {
@@ -40,7 +39,7 @@ class DummyUNetPlusPlus(nn.Module):
         }
         self.head = nn.Conv2d(int(input_channels), int(num_classes), kernel_size=1)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         logits = self.head(x)
         return logits
 
@@ -52,11 +51,11 @@ class DummyUNetPlusPlusRNN(nn.Module):
 
     def __init__(
         self,
-        num_classes: int = 1,
-        polymorphisms: int = 128,
-        hidden_dim: int = 4,
-        gru_layers: int = 1,
-        bidirectional: bool = True,
+        num_classes=1,
+        polymorphisms=128,
+        hidden_dim=4,
+        gru_layers=1,
+        bidirectional=True,
     ):
         super().__init__()
         self.polymorphisms = int(polymorphisms)
@@ -68,7 +67,7 @@ class DummyUNetPlusPlusRNN(nn.Module):
         }
         self.scale = nn.Parameter(torch.tensor(1.0))
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         if x.shape[1] != 4:
             raise ValueError(f"Expected 4 input channels, got {x.shape[1]}.")
         if x.shape[-1] != self.polymorphisms:
@@ -79,12 +78,12 @@ class DummyUNetPlusPlusRNN(nn.Module):
 def _make_training_h5(
     tmp_path,
     *,
-    n_reps: int,
-    N: int,
-    L: int,
-    with_gaps: bool = True,
-    force_no_positive: bool = False,
-) -> str:
+    n_reps,
+    N,
+    L,
+    with_gaps=True,
+    force_no_positive=False,
+):
     """
     Create a unified-schema training HDF5 file.
 
@@ -153,7 +152,7 @@ def _make_training_h5(
     return str(h5_path)
 
 
-def test_train_branch_unetplusplus_two_channel(tmp_path, monkeypatch) -> None:
+def test_train_branch_unetplusplus_two_channel(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -191,7 +190,7 @@ def test_train_branch_unetplusplus_two_channel(tmp_path, monkeypatch) -> None:
     assert "device = cpu" in training_log.read_text()
 
 
-def test_train_branch_neighbor_gap_fusion_four_channel(tmp_path, monkeypatch) -> None:
+def test_train_branch_neighbor_gap_fusion_four_channel(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -220,9 +219,7 @@ def test_train_branch_neighbor_gap_fusion_four_channel(tmp_path, monkeypatch) ->
     assert DummyUNetPlusPlusRNN.last_init["polymorphisms"] == 11
 
 
-def test_train_raises_when_add_rnn_true_but_missing_gap_datasets(
-    tmp_path, monkeypatch
-) -> None:
+def test_train_raises_when_add_rnn_true_but_missing_gap_datasets(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -245,7 +242,7 @@ def test_train_raises_when_add_rnn_true_but_missing_gap_datasets(
         )
 
 
-def test_train_raises_when_no_positive_class(tmp_path, monkeypatch) -> None:
+def test_train_raises_when_no_positive_class(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -272,12 +269,12 @@ def test_train_raises_when_no_positive_class(tmp_path, monkeypatch) -> None:
 class DummyUNetPlusPlus2(nn.Module):
     """Return logits derived from input (deterministic)."""
 
-    def __init__(self, num_classes: int = 1, input_channels: int = 2):
+    def __init__(self, num_classes=1, input_channels=2):
         super().__init__()
         self.num_classes = int(num_classes)
         self.input_channels = int(input_channels)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         # x: (B, Cin, N, L), we use tgt channel = 1
         tgt = x[:, 1:2, :, :]  # (B, 1, N, L)
         if self.num_classes == 1:
@@ -295,11 +292,11 @@ class DummyUNetPlusPlus2(nn.Module):
 class DummyUNetPlusPlusRNN2(nn.Module):
     """4-channel dummy; return logits=tgt channel."""
 
-    def __init__(self, num_classes: int = 1, polymorphisms: int = 128, **kwargs):
+    def __init__(self, num_classes=1, polymorphisms=128, **kwargs):
         super().__init__()
         self.polymorphisms = int(polymorphisms)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         # expect 4 channels when add_rnn=True
         if x.shape[1] != 4:
             raise ValueError(f"Expected 4 input channels, got {x.shape[1]}.")
@@ -308,14 +305,14 @@ class DummyUNetPlusPlusRNN2(nn.Module):
         return x[:, 1:2, :, :]  # ref channel = 0, tgt channel = 1, (B, 1, N, L)
 
 
-def _save_weights(tmp_path, model, filename) -> str:
+def _save_weights(tmp_path, model, filename):
     weights_path = tmp_path / filename
     save_file(model.state_dict(), str(weights_path))
 
     return str(weights_path)
 
 
-def _make_inference_h5(tmp_path, *, with_gaps: bool, L: int = 5) -> str:
+def _make_inference_h5(tmp_path, *, with_gaps, L=5):
     """
     n=2 windows, H=2 unique tgt samples (A,B), N=3 rows per window (upsampling: [A,B,A]).
     positions overlap: window0 = 100..104, window1 = 102..106
@@ -406,12 +403,12 @@ def _make_inference_h5(tmp_path, *, with_gaps: bool, L: int = 5) -> str:
     return str(h5_path)
 
 
-def _sigmoid_scalar(x: float) -> float:
+def _sigmoid_scalar(x):
     x = max(-60.0, min(60.0, x))
     return 1.0 / (1.0 + math.exp(-x))
 
 
-def _gauss_weights(L: int, sigma: float) -> np.ndarray:
+def _gauss_weights(L, sigma):
     mu = L // 2
     x = np.arange(L, dtype=np.float64)
     g = np.exp(-((x - mu) ** 2) / (2.0 * sigma * sigma))
@@ -419,7 +416,7 @@ def _gauss_weights(L: int, sigma: float) -> np.ndarray:
     return g.astype(np.float64)
 
 
-def _read_prob_table(path: str) -> dict[tuple[str, int], list[float]]:
+def _read_prob_table(path):
     """
     Returns mapping (sample, position) -> [Non_Intro_Prob, Intro_Prob]
     """
@@ -448,7 +445,7 @@ def _read_prob_table(path: str) -> dict[tuple[str, int], list[float]]:
     return out
 
 
-def test_train_raises_when_num_workers_is_negative(tmp_path, monkeypatch) -> None:
+def test_train_raises_when_num_workers_is_negative(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -470,7 +467,7 @@ def test_train_raises_when_num_workers_is_negative(tmp_path, monkeypatch) -> Non
         )
 
 
-def test_train_passes_drop_last_flags_to_dataloader(tmp_path, monkeypatch) -> None:
+def test_train_passes_drop_last_flags_to_dataloader(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -506,9 +503,7 @@ def test_train_passes_drop_last_flags_to_dataloader(tmp_path, monkeypatch) -> No
     assert captured["val_drop_last"] is True
 
 
-def test_train_uses_dataloader_drop_last_defaults_when_none(
-    tmp_path, monkeypatch
-) -> None:
+def test_train_uses_dataloader_drop_last_defaults_when_none(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -542,7 +537,7 @@ def test_train_uses_dataloader_drop_last_defaults_when_none(
     assert "val_drop_last" not in captured
 
 
-def test_train_use_amp_true_on_cpu_safely_falls_back(tmp_path, monkeypatch) -> None:
+def test_train_use_amp_true_on_cpu_safely_falls_back(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
     training_data = _make_training_h5(tmp_path, n_reps=20, N=2, L=7, with_gaps=True)
@@ -565,9 +560,7 @@ def test_train_use_amp_true_on_cpu_safely_falls_back(tmp_path, monkeypatch) -> N
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
-def test_train_amp_cuda_branch_uses_scaler_with_monkeypatch(
-    tmp_path, monkeypatch
-) -> None:
+def test_train_amp_cuda_branch_uses_scaler_with_monkeypatch(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
     training_data = _make_training_h5(tmp_path, n_reps=20, N=2, L=7, with_gaps=True)
@@ -631,9 +624,7 @@ def test_train_amp_cuda_branch_uses_scaler_with_monkeypatch(
     assert calls["autocast"] > 0
 
 
-def test_infer_unetplusplus_two_channel_outputs_table_binary(
-    tmp_path, monkeypatch
-) -> None:
+def test_infer_unetplusplus_two_channel_outputs_table_binary(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus2)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN2)
 
@@ -661,9 +652,7 @@ def test_infer_unetplusplus_two_channel_outputs_table_binary(
     assert got_B_102 == pytest.approx(exp_B_102, rel=1e-6, abs=1e-6)
 
 
-def test_infer_unet_rnn_four_channel_outputs_table_binary(
-    tmp_path, monkeypatch
-) -> None:
+def test_infer_unet_rnn_four_channel_outputs_table_binary(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus2)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN2)
 
@@ -683,9 +672,7 @@ def test_infer_unet_rnn_four_channel_outputs_table_binary(
     assert tab[("B", 102)] == pytest.approx(_sigmoid_scalar(14.5), rel=1e-6, abs=1e-6)
 
 
-def test_infer_raises_when_add_rnn_true_but_missing_gap_datasets(
-    tmp_path, monkeypatch
-) -> None:
+def test_infer_raises_when_add_rnn_true_but_missing_gap_datasets(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus2)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN2)
 
@@ -702,7 +689,7 @@ def test_infer_raises_when_add_rnn_true_but_missing_gap_datasets(
         )
 
 
-def test_infer_site_weighting_changes_overlap_result(tmp_path, monkeypatch) -> None:
+def test_infer_site_weighting_changes_overlap_result(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus2)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN2)
 
@@ -744,7 +731,7 @@ def test_infer_site_weighting_changes_overlap_result(tmp_path, monkeypatch) -> N
     assert t1[("A", 102)] != pytest.approx(t0[("A", 102)], rel=1e-9, abs=1e-9)
 
 
-def test_binary_batch_accuracy_from_logits() -> None:
+def test_binary_batch_accuracy_from_logits():
     logits = torch.tensor([[-1.0, 2.0, 0.0, -0.1]])
     labels = torch.tensor([[0.0, 0.0, 1.0, 1.0]])
 
@@ -753,7 +740,7 @@ def test_binary_batch_accuracy_from_logits() -> None:
     assert accuracy == 0.5
 
 
-def test_binary_batch_accuracy_from_logits_zero_logit_is_positive() -> None:
+def test_binary_batch_accuracy_from_logits_zero_logit_is_positive():
     logits = torch.tensor([[0.0, -0.0, 1e-12, -1e-12]])
     labels = torch.tensor([[1.0, 1.0, 1.0, 0.0]])
 
@@ -762,7 +749,7 @@ def test_binary_batch_accuracy_from_logits_zero_logit_is_positive() -> None:
     assert accuracy == 1.0
 
 
-def test_train_passes_worker_perf_kwargs_to_dataloader(tmp_path, monkeypatch) -> None:
+def test_train_passes_worker_perf_kwargs_to_dataloader(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 
@@ -799,9 +786,7 @@ def test_train_passes_worker_perf_kwargs_to_dataloader(tmp_path, monkeypatch) ->
     assert captured["prefetch_factor"] == 5
 
 
-def test_train_uses_dataloader_worker_perf_defaults_when_none(
-    tmp_path, monkeypatch
-) -> None:
+def test_train_uses_dataloader_worker_perf_defaults_when_none(tmp_path, monkeypatch):
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
 

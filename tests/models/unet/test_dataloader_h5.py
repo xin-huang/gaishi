@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,7 +17,6 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 import h5py
 import numpy as np
 import pytest
@@ -31,12 +30,12 @@ from gaishi.models.unet.dataloader_h5 import (  # noqa: F401
 
 
 def _write_h5(
-    path: str,
+    path,
     *,
-    R: int = 8,
-    N: int = 3,
-    L: int = 5,
-    with_labels: bool = True,
+    R=8,
+    N=3,
+    L=5,
+    with_labels=True,
 ):
     rng = np.random.default_rng(42)
 

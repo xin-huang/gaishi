@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,7 +17,6 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Annotated, Union
 from gaishi.configs import ModelConfig
@@ -25,7 +24,6 @@ from gaishi.configs import FeatureVectorSimulationConfig
 from gaishi.configs import GenotypeMatrixSimulationConfig
 from gaishi.configs import FeatureVectorPreprocessConfig
 from gaishi.configs import GenotypeMatrixPreprocessConfig
-
 
 SimulationConfigUnion = Annotated[
     Union[FeatureVectorSimulationConfig, GenotypeMatrixSimulationConfig],

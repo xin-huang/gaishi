@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,9 +17,7 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 from importlib.metadata import version, PackageNotFoundError
-
 
 try:
     __version__ = version("gaishi")

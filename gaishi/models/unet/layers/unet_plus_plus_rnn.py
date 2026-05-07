@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,7 +17,6 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 import torch
 import torch.nn as nn
 from gaishi.models.unet.layers import UNetPlusPlus
@@ -34,15 +33,15 @@ class UNetPlusPlusRNN(nn.Module):
       the width dimension.
 
     The fusion treats each row as a sequence:
-    - Sequence length is ``W`` (width).
-    - GRU batch dimension is ``B * H`` (batch times height).
+    - Sequence length is `W` (width).
+    - GRU batch dimension is `B * H` (batch times height).
 
     Parameters
     ----------
     num_classes : int
         Number of classes.
     polymorphisms : int
-        Expected width ``W`` of the input. The final MLP maps a length-``W`` vector to length-``W``.
+        Expected width `W` of the input. The final MLP maps a length-`W` vector to length-`W`.
         Default: 128.
     hidden_dim : int
         Hidden size of the GRU. Default: 4.
@@ -56,7 +55,7 @@ class UNetPlusPlusRNN(nn.Module):
     ValueError
         If the input does not have 4 channels.
     ValueError
-        If the input width does not match ``polymorphisms``.
+        If the input width does not match `polymorphisms`.
     """
 
     def __init__(
@@ -101,14 +100,14 @@ class UNetPlusPlusRNN(nn.Module):
         Parameters
         ----------
         x : torch.Tensor
-            Input tensor of shape ``(B, 4, H, W)``.
-            - ``x[:, 0:2]``: convolutional channels for UNet++.
-            - ``x[:, 2:4]``: neighbor-gap channels (gap_to_prev, gap_to_next).
+            Input tensor of shape `(B, 4, H, W)`.
+            - `x[:, 0:2]`: convolutional channels for UNet++.
+            - `x[:, 2:4]`: neighbor-gap channels (gap_to_prev, gap_to_next).
 
         Returns
         -------
         torch.Tensor
-            Output tensor of shape ``(B, H, W)``.
+            Output tensor of shape `(B, H, W)`.
         """
         if x.shape[1] != 4:
             raise ValueError(f"Expected 4 input channels, got {x.shape[1]}.")

@@ -1,5 +1,6 @@
+# Copyright 2026 Xin Huang
+#
 # GNU General Public License v3.0
-# Copyright 2024 Xin Huang
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 import demes, msprime, os, tskit
 import pyranges as pr
@@ -116,14 +116,14 @@ class MsprimeSimulator(GenericSimulator):
 
         Parameters
         ----------
-        rep : int or None
+        rep : int or None, optional
             Used to specify the replicate number for the simulation. This attribute is not set
             in the constructor but should be assigned before running simulations that require
-            tracking or distinguishing between multiple replicates.
-        seed : int or None
+            tracking or distinguishing between multiple replicates. Default: None.
+        seed : int or None, optional
             Seed for the random number generator to ensure reproducibility of the simulations.
             Similar to `rep`, this is not directly set in the constructor but should be specified
-            to ensure that simulations can be reproduced exactly.
+            to ensure that simulations can be reproduced exactly. Default: None.
 
         Returns
         -------

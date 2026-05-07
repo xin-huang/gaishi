@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 import h5py, os
 from typing import Optional
@@ -77,54 +76,54 @@ class UNetModel(MlModel):
         Train a UNet model on an HDF5 dataset and save the best weights.
 
         This training routine assumes the unified HDF5 schema produced by
-        ``write_h5(..., ds_type="train")``. The HDF5 file stores all genotype matrices
+        `write_h5(..., ds_type="train")`. The HDF5 file stores all genotype matrices
         as dense datasets under fixed paths. Each genotype matrix is one training sample.
 
         HDF5 schema (training)
         ----------------------
         Inputs (always required)
-        - ``/data/Ref_genotype`` : uint32, shape (n, N, L)
-        - ``/data/Tgt_genotype`` : uint32, shape (n, N, L)
-        - ``/data/Gap_to_prev``  : int64,  shape (n, N, L)
-        - ``/data/Gap_to_next``  : int64,  shape (n, N, L)
+        - `/data/Ref_genotype` : uint32, shape (n, N, L)
+        - `/data/Tgt_genotype` : uint32, shape (n, N, L)
+        - `/data/Gap_to_prev`  : int64,  shape (n, N, L)
+        - `/data/Gap_to_next`  : int64,  shape (n, N, L)
 
         Targets (required for training)
-        - ``/targets/Label``     : uint8,  shape (n, N, L)
+        - `/targets/Label`     : uint8,  shape (n, N, L)
 
         Metadata
-        - ``/meta`` attributes include ``n``, ``N`` and ``L``.
+        - `/meta` attributes include `n`, `N` and `L`.
 
         Batch semantics
         --------------
         The DataLoader draws individual replicates and stacks them into batches. With
-        ``batch_size=B`` and ``add_rnn``:
+        `batch_size=B` and `add_rnn`:
 
-        - If ``add_rnn=False``: model inputs are constructed as 2 channels
-          ``[Ref_genotype, Tgt_genotype]`` and the batch tensor has shape ``(B, 2, N, L)``.
-        - If ``add_rnn=True``: model inputs are constructed as 4 channels
-          ``[Ref_genotype, Tgt_genotype, Gap_to_prev, Gap_to_next]`` and the batch tensor
-          has shape ``(B, 4, N, L)``.
+        - If `add_rnn=False`: model inputs are constructed as 2 channels
+          `[Ref_genotype, Tgt_genotype]` and the batch tensor has shape `(B, 2, N, L)`.
+        - If `add_rnn=True`: model inputs are constructed as 4 channels
+          `[Ref_genotype, Tgt_genotype, Gap_to_prev, Gap_to_next]` and the batch tensor
+          has shape `(B, 4, N, L)`.
 
-        Labels are loaded from ``/targets/Label`` and collated as ``(B, 1, N, L)``.
-        During training, the label channel dimension is removed via ``y = y.squeeze(1)``
-        to match a binary-logit output of shape ``(B, N, L)``.
+        Labels are loaded from `/targets/Label` and collated as `(B, 1, N, L)`.
+        During training, the label channel dimension is removed via `y = y.squeeze(1)`
+        to match a binary-logit output of shape `(B, N, L)`.
 
         Train/validation split
         ----------------------
         Replicates are split deterministically into training and validation subsets by
-        shuffling replicate indices with ``seed`` and taking ``val_prop`` as validation.
-        The selected indices are returned by ``build_dataloaders_from_h5``.
+        shuffling replicate indices with `seed` and taking `val_prop` as validation.
+        The selected indices are returned by `build_dataloaders_from_h5`.
 
         Class imbalance
         ---------------
         A negative-to-positive ratio is computed over the training replicates only from
-        ``/targets/Label`` and used as ``pos_weight`` in ``BCEWithLogitsLoss``.
+        `/targets/Label` and used as `pos_weight` in `BCEWithLogitsLoss`.
 
         Outputs
         -------
-        1. ``output``: model weights with the lowest validation loss
-        2. ``training.log``: periodic training loss and accuracy
-        3. ``validation.log``: validation loss and accuracy per epoch
+        1. `output`: model weights with the lowest validation loss
+        2. `training.log`: periodic training loss and accuracy
+        3. `validation.log`: validation loss and accuracy per epoch
 
         Parameters
         ----------
@@ -154,30 +153,30 @@ class UNetModel(MlModel):
         seed : int, optional
             Seed used for deterministic train/validation split and for label smoothing.
             Default: None.
-        device : Optional[str].
-            Force device string like ``"cuda:0"`` or ``"cpu"``. Default: None.
+        device : Optional[str], optional
+            Force device string like `"cuda:0"` or `"cpu"`. Default: None.
         num_workers : int, optional
             Number of DataLoader worker processes used for training/validation
             loaders. Default: 0.
         train_drop_last : Optional[bool], optional
             Whether to drop the final incomplete batch in the training DataLoader.
-            If None, use ``build_dataloaders_from_h5`` default. Default: None.
+            If None, use `build_dataloaders_from_h5` default. Default: None.
         val_drop_last : Optional[bool], optional
             Whether to drop the final incomplete batch in the validation DataLoader.
-            If None, use ``build_dataloaders_from_h5`` default. Default: None.
+            If None, use `build_dataloaders_from_h5` default. Default: None.
         persistent_workers : Optional[bool], optional
             Keep DataLoader worker processes alive across epochs to reduce worker
-            startup overhead. Effective only when ``num_workers > 0``. When None,
-            defer to ``build_dataloaders_from_h5`` defaults. Default: None.
+            startup overhead. Effective only when `num_workers > 0`. When None,
+            defer to `build_dataloaders_from_h5` defaults. Default: None.
         prefetch_factor : Optional[int], optional
             Number of batches prefetched by each DataLoader worker. Must be a
-            positive integer when set. Effective only when ``num_workers > 0``.
-            When None, defer to ``build_dataloaders_from_h5`` defaults.
+            positive integer when set. Effective only when `num_workers > 0`.
+            When None, defer to `build_dataloaders_from_h5` defaults.
             Default: None.
         use_amp : bool, optional
             Enable CUDA AMP training/inference execution path. When True and CUDA is
             used, forward/loss runs under autocast and backpropagation uses
-            ``GradScaler``. Default: False.
+            `GradScaler`. Default: False.
 
         Raises
         ------
@@ -186,7 +185,7 @@ class UNetModel(MlModel):
         ValueError
             If training labels contain no positive class.
         ValueError
-            If ``num_workers`` is not a non-negative integer.
+            If `num_workers` is not a non-negative integer.
         KeyError
             If required datasets are missing from the HDF5 file.
         """
@@ -377,23 +376,23 @@ class UNetModel(MlModel):
         """
         Run inference on an HDF5 file and write an aggregated prediction table.
 
-        This function reads model inputs from the unified, genotype-matrix-indexed layout in ``data`` and
+        This function reads model inputs from the unified, genotype-matrix-indexed layout in `data` and
         runs batched PyTorch inference. It aggregates window-level logits across overlapping windows (and across
         upsampled/repeated rows that map back to the same original target sample) using
-        ``/index/tgt_ids`` and ``/coords/Position``. For each target sample and each global position,
+        `/index/tgt_ids` and `/coords/Position`. For each target sample and each global position,
         logits are accumulated (sum and count), converted to mean logits, and then transformed into
         probabilities (sigmoid for binary, softmax for multiclass). Results are written as a TSV table
-        to ``output``.
+        to `output`.
 
-        Inputs are read from ``/data/Ref_genotype`` and ``/data/Tgt_genotype``. If ``add_rnn`` is
-        True, the additional channels are read from ``/data/Gap_to_prev`` and ``/data/Gap_to_next``.
-        The window length ``L`` is taken from ``/meta`` (and must match the last dimension of the
+        Inputs are read from `/data/Ref_genotype` and `/data/Tgt_genotype`. If `add_rnn` is
+        True, the additional channels are read from `/data/Gap_to_prev` and `/data/Gap_to_next`.
+        The window length `L` is taken from `/meta` (and must match the last dimension of the
         input datasets). The set of global positions is computed as the unique union of
-        ``/coords/Position`` values over the written windows.
+        `/coords/Position` values over the written windows.
 
         The output table is long-form and contains one row per (target sample, position). For binary
-        classification the columns are: ``sample``, ``position``, ``prob``, ``count``. For multiclass
-        classification the columns are: ``sample``, ``position``, ``count``, and ``prob_0..prob_{C-1}``,
+        classification the columns are: `sample`, `position`, `prob`, `count`. For multiclass
+        classification the columns are: `sample`, `position`, `count`, and `prob_0..prob_{C-1}`,
         where probabilities sum to 1 across classes for each (sample, position).
 
         Parameters
@@ -401,33 +400,33 @@ class UNetModel(MlModel):
         data : str
             Path to the input HDF5 file in the unified schema.
         model : str
-            Path to a ``.safetensors`` checkpoint (e.g. ``best.safetensors``).
+            Path to a `.safetensors` checkpoint (e.g. `best.safetensors`).
         output : str
             Path to the output file.
         add_rnn : bool, optional
-            If False, use only ``Ref_genotype`` and ``Tgt_genotype`` (2 channels) and
-            instantiate ``UNetPlusPlus`` with ``input_channels=2``.
-            If True, require ``Gap_to_prev`` and ``Gap_to_next`` (4 channels total) and use
-            ``UNetPlusPlusRNN``. Default: False.
+            If False, use only `Ref_genotype` and `Tgt_genotype` (2 channels) and
+            instantiate `UNetPlusPlus` with `input_channels=2`.
+            If True, require `Gap_to_prev` and `Gap_to_next` (4 channels total) and use
+            `UNetPlusPlusRNN`. Default: False.
         batch_size : int, optional
             Number of genotype matrices/windows processed per forward pass. Default: 8.
         site_weighting : bool, optional
             Whether to apply within-window site weighting when aggregating overlapping windows into
-            global per-site predictions. If True, each site at relative offset ``t`` within a window
-            contributes with weight ``g[t]`` (a 1D Gaussian window; peak-normalized to 1), so that
+            global per-site predictions. If True, each site at relative offset `t` within a window
+            contributes with weight `g[t]` (a 1D Gaussian window; peak-normalized to 1), so that
             central sites receive higher weight than edge sites. If False, all sites are weighted
-            equally (equivalent to ``g[t]=1`` for all ``t``). Default: False.
-        device : Optional[str].
-            Force device string like ``"cuda:0"`` or ``"cpu"``. Default: None.
+            equally (equivalent to `g[t]=1` for all `t`). Default: False.
+        device : Optional[str], optional
+            Force device string like `"cuda:0"` or `"cpu"`. Default: None.
 
         Raises
         ------
         KeyError
-            If required unified-schema datasets are missing (e.g. ``/data/Ref_genotype``),
-            or if ``add_rnn`` is True but gap datasets are missing.
+            If required unified-schema datasets are missing (e.g. `/data/Ref_genotype`),
+            or if `add_rnn` is True but gap datasets are missing.
         ValueError
             If model output has an unexpected shape, or if configuration constraints are violated
-            (e.g. ``add_rnn=True`` with ``n_classes!=1``).
+            (e.g. `add_rnn=True` with `n_classes!=1`).
         """
         n_classes = 1
 
