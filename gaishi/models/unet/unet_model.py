@@ -68,6 +68,8 @@ class UNetModel(MlModel):
         num_workers: int = 0,
         train_drop_last: Optional[bool] = None,
         val_drop_last: Optional[bool] = None,
+        persistent_workers: Optional[bool] = None,
+        prefetch_factor: Optional[int] = None,
         use_amp: bool = False,
         **kwargs,
     ) -> None:
@@ -163,6 +165,15 @@ class UNetModel(MlModel):
         val_drop_last : Optional[bool], optional
             Whether to drop the final incomplete batch in the validation DataLoader.
             If None, use ``build_dataloaders_from_h5`` default. Default: None.
+        persistent_workers : Optional[bool], optional
+            Keep DataLoader worker processes alive across epochs to reduce worker
+            startup overhead. Effective only when ``num_workers > 0``. When None,
+            defer to ``build_dataloaders_from_h5`` defaults. Default: None.
+        prefetch_factor : Optional[int], optional
+            Number of batches prefetched by each DataLoader worker. Must be a
+            positive integer when set. Effective only when ``num_workers > 0``.
+            When None, defer to ``build_dataloaders_from_h5`` defaults.
+            Default: None.
         use_amp : bool, optional
             Enable CUDA AMP training/inference execution path. When True and CUDA is
             used, forward/loss runs under autocast and backpropagation uses
@@ -225,6 +236,10 @@ class UNetModel(MlModel):
             dataloader_kwargs["train_drop_last"] = train_drop_last
         if val_drop_last is not None:
             dataloader_kwargs["val_drop_last"] = val_drop_last
+        if persistent_workers is not None:
+            dataloader_kwargs["persistent_workers"] = persistent_workers
+        if prefetch_factor is not None:
+            dataloader_kwargs["prefetch_factor"] = prefetch_factor
 
         train_loader, val_loader, train_indices, val_indices = (
             build_dataloaders_from_h5(**dataloader_kwargs)
