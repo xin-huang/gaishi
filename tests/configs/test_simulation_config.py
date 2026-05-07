@@ -131,9 +131,7 @@ def test_genotype_matrix_simulation_config_valid():
     ],
 )
 @pytest.mark.parametrize("bad_value", [0, -1])
-def test_simulation_config_positive_int_fields_must_be_gt_zero(
-    field: str, bad_value: int
-):
+def test_simulation_config_positive_int_fields_must_be_gt_zero(field, bad_value):
     kwargs = _valid_feature_vector_kwargs()
     kwargs[field] = bad_value
     with pytest.raises(ValidationError):
@@ -146,7 +144,7 @@ def test_simulation_config_positive_int_fields_must_be_gt_zero(
 
 
 @pytest.mark.parametrize("bad_value", [0.0, -1e-8])
-def test_simulation_config_mut_rate_must_be_strictly_positive(bad_value: float):
+def test_simulation_config_mut_rate_must_be_strictly_positive(bad_value):
     kwargs = _valid_feature_vector_kwargs()
     kwargs["mut_rate"] = bad_value
     with pytest.raises(ValidationError):
@@ -159,7 +157,7 @@ def test_simulation_config_mut_rate_must_be_strictly_positive(bad_value: float):
 
 
 @pytest.mark.parametrize("bad_value", [-1e-8])
-def test_simulation_config_rec_rate_must_be_ge_zero(bad_value: float):
+def test_simulation_config_rec_rate_must_be_ge_zero(bad_value):
     kwargs = _valid_feature_vector_kwargs()
     kwargs["rec_rate"] = bad_value
     with pytest.raises(ValidationError):
@@ -173,9 +171,7 @@ def test_simulation_config_rec_rate_must_be_ge_zero(bad_value: float):
 
 @pytest.mark.parametrize("field", ["intro_prop", "non_intro_prop"])
 @pytest.mark.parametrize("value", [0.0, 0.5, 1.0])
-def test_feature_vector_simulation_config_props_in_closed_interval(
-    field: str, value: float
-):
+def test_feature_vector_simulation_config_props_in_closed_interval(field, value):
     kwargs = _valid_feature_vector_kwargs()
     kwargs[field] = value
     cfg = FeatureVectorSimulationConfig(**kwargs)
@@ -184,7 +180,7 @@ def test_feature_vector_simulation_config_props_in_closed_interval(
 
 @pytest.mark.parametrize("field", ["intro_prop", "non_intro_prop"])
 @pytest.mark.parametrize("value", [-0.1, 1.1])
-def test_feature_vector_simulation_config_props_out_of_range(field: str, value: float):
+def test_feature_vector_simulation_config_props_out_of_range(field, value):
     kwargs = _valid_feature_vector_kwargs()
     kwargs[field] = value
     with pytest.raises(ValidationError):
@@ -194,7 +190,7 @@ def test_feature_vector_simulation_config_props_out_of_range(field: str, value: 
 @pytest.mark.parametrize("field", ["num_polymorphisms"])
 @pytest.mark.parametrize("bad_value", [0, -1])
 def test_genotype_matrix_simulation_config_specific_fields_must_be_gt_zero(
-    field: str, bad_value: int
+    field, bad_value
 ):
     kwargs = _valid_genotype_matrix_kwargs()
     kwargs[field] = bad_value

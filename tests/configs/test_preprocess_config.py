@@ -69,9 +69,7 @@ def test_preprocess_config_valid():
 
 @pytest.mark.parametrize("field", ["win_len", "win_step", "nprocess", "ploidy"])
 @pytest.mark.parametrize("bad_value", [0, -1])
-def test_preprocess_config_positive_int_fields_must_be_gt_zero(
-    field: str, bad_value: int
-):
+def test_preprocess_config_positive_int_fields_must_be_gt_zero(field, bad_value):
     kwargs = _valid_kwargs()
     kwargs[field] = bad_value
 

@@ -98,7 +98,7 @@ def test_write_tsv_appends_rows(tmp_path):
     assert lines == ["[1, 2]\t3", "[9, 8, 7]\t4"]
 
 
-def _read_str_1d(ds) -> list[str]:
+def _read_str_1d(ds):
     """Read a 1D h5py string dataset into Python strings."""
     out = []
     for x in ds[...]:
@@ -109,7 +109,7 @@ def _read_str_1d(ds) -> list[str]:
     return out
 
 
-def _assert_string_table(ds: h5py.Dataset, expected: list[str]) -> None:
+def _assert_string_table(ds, expected):
     # h5py vlen utf-8 strings often show up as dtype=object
     sdt = h5py.check_string_dtype(ds.dtype)
     assert sdt is not None

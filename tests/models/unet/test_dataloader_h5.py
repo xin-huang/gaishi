@@ -30,12 +30,12 @@ from gaishi.models.unet.dataloader_h5 import (  # noqa: F401
 
 
 def _write_h5(
-    path: str,
+    path,
     *,
-    R: int = 8,
-    N: int = 3,
-    L: int = 5,
-    with_labels: bool = True,
+    R=8,
+    N=3,
+    L=5,
+    with_labels=True,
 ):
     rng = np.random.default_rng(42)
 
