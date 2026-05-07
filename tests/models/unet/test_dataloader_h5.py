@@ -243,9 +243,10 @@ def test_build_dataloaders_from_h5_shapes_indices_and_content(h5_with_labels):
     assert train_idx2 == train_idx
     assert val_idx2 == val_idx
 
-    # Loader lengths respect drop_last=True
+    # Loader lengths respect default drop_last settings:
+    # train=True, val=False
     assert len(train_loader) == n_train // batch_size
-    assert len(val_loader) == n_val // batch_size
+    assert len(val_loader) == (n_val + batch_size - 1) // batch_size
 
     xb_tr, yb_tr = next(iter(train_loader))
     assert xb_tr.shape == (batch_size, 4, N, L)
@@ -285,3 +286,28 @@ def test_build_dataloaders_from_h5_shapes_indices_and_content(h5_with_labels):
     base_ds = train_loader.dataset.dataset  # Subset.dataset -> base H5Dataset
     if getattr(base_ds, "_h5", None) is not None:
         base_ds._h5.close()
+
+
+def test_build_dataloaders_from_h5_drop_last_flags(h5_with_labels):
+    path, (ref, _tgt, _gp, _gn, _lab) = h5_with_labels
+    R = ref.shape[0]
+
+    val_prop = 0.25
+    n_val = int(R * val_prop)
+    n_train = R - n_val
+    batch_size = 2
+
+    train_loader, val_loader, _train_idx, _val_idx = build_dataloaders_from_h5(
+        h5_file=path,
+        channels=4,
+        batch_size=batch_size,
+        val_prop=val_prop,
+        num_workers=0,
+        pin_memory=False,
+        seed=0,
+        train_drop_last=False,
+        val_drop_last=True,
+    )
+
+    assert len(train_loader) == (n_train + batch_size - 1) // batch_size
+    assert len(val_loader) == n_val // batch_size

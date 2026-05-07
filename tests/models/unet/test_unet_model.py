@@ -448,8 +448,6 @@ def _read_prob_table(path: str) -> dict[tuple[str, int], list[float]]:
     return out
 
 
-
-
 def test_train_raises_when_num_workers_is_negative(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
     monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
@@ -470,6 +468,80 @@ def test_train_raises_when_num_workers_is_negative(tmp_path, monkeypatch) -> Non
             seed=0,
             num_workers=-1,
         )
+
+
+def test_train_passes_drop_last_flags_to_dataloader(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+
+    training_data = _make_training_h5(tmp_path, n_reps=10, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_drop_last" / "best.safetensors"
+
+    captured = {}
+
+    def _fake_build_dataloaders_from_h5(**kwargs):
+        captured.update(kwargs)
+        raise RuntimeError("stop_after_capture")
+
+    monkeypatch.setattr(
+        unet_mod, "build_dataloaders_from_h5", _fake_build_dataloaders_from_h5
+    )
+
+    with pytest.raises(RuntimeError, match="stop_after_capture"):
+        unet_mod.UNetModel.train(
+            data=training_data,
+            output=str(model_path),
+            add_rnn=False,
+            batch_size=2,
+            n_epochs=1,
+            n_early=0,
+            min_delta=0.0,
+            val_prop=0.2,
+            seed=0,
+            train_drop_last=False,
+            val_drop_last=True,
+        )
+
+    assert captured["train_drop_last"] is False
+    assert captured["val_drop_last"] is True
+
+
+def test_train_uses_dataloader_drop_last_defaults_when_none(
+    tmp_path, monkeypatch
+) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+
+    training_data = _make_training_h5(tmp_path, n_reps=10, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_drop_last_defaults" / "best.safetensors"
+
+    captured = {}
+
+    def _fake_build_dataloaders_from_h5(**kwargs):
+        captured.update(kwargs)
+        raise RuntimeError("stop_after_capture")
+
+    monkeypatch.setattr(
+        unet_mod, "build_dataloaders_from_h5", _fake_build_dataloaders_from_h5
+    )
+
+    with pytest.raises(RuntimeError, match="stop_after_capture"):
+        unet_mod.UNetModel.train(
+            data=training_data,
+            output=str(model_path),
+            add_rnn=False,
+            batch_size=2,
+            n_epochs=1,
+            n_early=0,
+            min_delta=0.0,
+            val_prop=0.2,
+            seed=0,
+        )
+
+    assert "train_drop_last" not in captured
+    assert "val_drop_last" not in captured
+
+
 def test_infer_unetplusplus_two_channel_outputs_table_binary(
     tmp_path, monkeypatch
 ) -> None:

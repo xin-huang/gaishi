@@ -203,7 +203,7 @@ def make_h5_collate_fn(
         rng = np.random.default_rng()
 
     def _collate(
-        batch: List[Tuple[np.ndarray, Optional[np.ndarray]]]
+        batch: List[Tuple[np.ndarray, Optional[np.ndarray]]],
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
         xs: List[np.ndarray] = []
         ys: List[np.ndarray] = []
@@ -243,6 +243,8 @@ def build_dataloaders_from_h5(
     seed: int = 0,
     train_label_smooth: bool = True,
     train_label_noise: float = 0.01,
+    train_drop_last: bool = True,
+    val_drop_last: bool = False,
 ) -> Tuple[DataLoader, DataLoader, List[int], List[int]]:
     """
     Construct train/validation DataLoaders from an HDF5 file via `torch.random_split`.
@@ -276,15 +278,19 @@ def build_dataloaders_from_h5(
         Whether to apply label smoothing/noise in the training collate function.
     train_label_noise : float, default=0.01
         Maximum smoothing noise amplitude used when `train_label_smooth=True`.
+    train_drop_last : bool, default=True
+        Whether to drop the final incomplete batch in the training DataLoader.
+    val_drop_last : bool, default=False
+        Whether to drop the final incomplete batch in the validation DataLoader.
 
     Returns
     -------
     train_loader : torch.utils.data.DataLoader
         Training loader built from the training subset. Uses `shuffle=True` and
-        `drop_last=True`.
+        configurable `drop_last` via ``train_drop_last``.
     val_loader : torch.utils.data.DataLoader
         Validation loader built from the validation subset. Uses `shuffle=False`
-        and `drop_last=True`.
+        and configurable `drop_last` via ``val_drop_last``.
     train_indices : list[int]
         Replicate indices (into the base dataset) assigned to training.
         This is `train_subset.indices` from the `Subset` returned by `random_split`.
@@ -298,7 +304,8 @@ def build_dataloaders_from_h5(
     - Shuffling order within the training loader is controlled by PyTorch; set
       `torch.manual_seed(...)` externally if you need deterministic per-epoch
       shuffling in tests.
-    - Both loaders use `drop_last=True`, so incomplete final batches are dropped.
+    - ``drop_last`` behavior is configurable per loader via ``train_drop_last`` and
+      ``val_drop_last``.
     """
     # Base dataset over all replicates/windows
     base_ds = H5Dataset(
@@ -331,7 +338,7 @@ def build_dataloaders_from_h5(
         shuffle=True,
         num_workers=num_workers,
         pin_memory=pin_memory,
-        drop_last=True,
+        drop_last=train_drop_last,
         collate_fn=make_h5_collate_fn(
             label_smooth=train_label_smooth,
             label_noise=train_label_noise,
@@ -345,7 +352,7 @@ def build_dataloaders_from_h5(
         shuffle=False,
         num_workers=num_workers,
         pin_memory=pin_memory,
-        drop_last=True,
+        drop_last=val_drop_last,
         collate_fn=make_h5_collate_fn(
             label_smooth=False,
             rng=val_rng,

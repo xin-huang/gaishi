@@ -67,6 +67,8 @@ class UNetModel(MlModel):
         seed: int = None,
         device: str = None,
         num_workers: int = 0,
+        train_drop_last: Optional[bool] = None,
+        val_drop_last: Optional[bool] = None,
         **kwargs,
     ) -> None:
         """
@@ -155,6 +157,12 @@ class UNetModel(MlModel):
         num_workers : int, optional
             Number of DataLoader worker processes used for training/validation
             loaders. Default: 0.
+        train_drop_last : Optional[bool], optional
+            Whether to drop the final incomplete batch in the training DataLoader.
+            If None, use ``build_dataloaders_from_h5`` default. Default: None.
+        val_drop_last : Optional[bool], optional
+            Whether to drop the final incomplete batch in the validation DataLoader.
+            If None, use ``build_dataloaders_from_h5`` default. Default: None.
 
         Raises
         ------
@@ -198,18 +206,24 @@ class UNetModel(MlModel):
 
         input_channels = 4 if add_rnn else 2
 
+        dataloader_kwargs = dict(
+            h5_file=data,
+            channels=input_channels,
+            batch_size=batch_size,
+            val_prop=val_prop,
+            num_workers=num_workers,
+            pin_memory=torch.cuda.is_available(),
+            seed=seed,
+            train_label_smooth=True,
+            train_label_noise=0.01,
+        )
+        if train_drop_last is not None:
+            dataloader_kwargs["train_drop_last"] = train_drop_last
+        if val_drop_last is not None:
+            dataloader_kwargs["val_drop_last"] = val_drop_last
+
         train_loader, val_loader, train_indices, val_indices = (
-            build_dataloaders_from_h5(
-                h5_file=data,
-                channels=input_channels,
-                batch_size=batch_size,
-                val_prop=val_prop,
-                num_workers=num_workers,
-                pin_memory=torch.cuda.is_available(),
-                seed=seed,
-                train_label_smooth=True,
-                train_label_noise=0.01,
-            )
+            build_dataloaders_from_h5(**dataloader_kwargs)
         )
 
         # Compute negative to positive ratio on training indices only
