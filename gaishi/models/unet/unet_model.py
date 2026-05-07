@@ -268,8 +268,8 @@ class UNetModel(MlModel):
             for batch_idx, (x, y) in enumerate(train_loader, start=1):
                 optimizer.zero_grad()
 
-                x = x.to(device)
-                y = y.to(device).float()
+                x = x.to(device, non_blocking=True)
+                y = y.to(device, non_blocking=True).float()
 
                 y_pred = net(x)
 
@@ -296,8 +296,8 @@ class UNetModel(MlModel):
 
             for _, (x, y) in enumerate(val_loader):
                 with torch.no_grad():
-                    x = x.to(device)
-                    y = y.to(device).float()
+                    x = x.to(device, non_blocking=True)
+                    y = y.to(device, non_blocking=True).float()
 
                     y_pred = net(x)
                     loss = criterion(y_pred, y)
