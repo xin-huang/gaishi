@@ -542,6 +542,95 @@ def test_train_uses_dataloader_drop_last_defaults_when_none(
     assert "val_drop_last" not in captured
 
 
+def test_train_use_amp_true_on_cpu_safely_falls_back(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+    training_data = _make_training_h5(tmp_path, n_reps=20, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_amp_cpu" / "best.safetensors"
+
+    unet_mod.UNetModel.train(
+        data=training_data,
+        output=str(model_path),
+        add_rnn=False,
+        batch_size=2,
+        n_epochs=1,
+        n_early=0,
+        min_delta=0.0,
+        val_prop=0.2,
+        seed=0,
+        device="cpu",
+        use_amp=True,
+    )
+    assert model_path.exists()
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
+def test_train_amp_cuda_branch_uses_scaler_with_monkeypatch(
+    tmp_path, monkeypatch
+) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+    training_data = _make_training_h5(tmp_path, n_reps=20, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_amp_cuda" / "best.safetensors"
+
+    calls = {"scale": 0, "step": 0, "update": 0, "autocast": 0}
+
+    class _FakeScaler:
+        def __init__(self, enabled=False):
+            self.enabled = enabled
+
+        def scale(self, loss):
+            calls["scale"] += 1
+            return loss
+
+        def step(self, optimizer):
+            calls["step"] += 1
+            optimizer.step()
+
+        def update(self):
+            calls["update"] += 1
+
+    class _FakeAutocast:
+        def __init__(self, enabled=False):
+            self.enabled = enabled
+
+        def __enter__(self):
+            if self.enabled:
+                calls["autocast"] += 1
+            return None
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+    monkeypatch.setattr(unet_mod, "GradScaler", _FakeScaler)
+    monkeypatch.setattr(unet_mod, "autocast", _FakeAutocast)
+    monkeypatch.setattr(unet_mod.torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(
+        unet_mod.torch.nn.Module, "to", lambda self, *args, **kwargs: self
+    )
+    monkeypatch.setattr(unet_mod.torch.Tensor, "to", lambda self, *args, **kwargs: self)
+
+    unet_mod.UNetModel.train(
+        data=training_data,
+        output=str(model_path),
+        add_rnn=False,
+        batch_size=2,
+        n_epochs=1,
+        n_early=0,
+        min_delta=0.0,
+        val_prop=0.2,
+        seed=0,
+        device="cuda:0",
+        use_amp=True,
+    )
+
+    assert model_path.exists()
+    assert calls["scale"] > 0
+    assert calls["step"] > 0
+    assert calls["update"] > 0
+    assert calls["autocast"] > 0
+
+
 def test_infer_unetplusplus_two_channel_outputs_table_binary(
     tmp_path, monkeypatch
 ) -> None:
