@@ -653,3 +653,21 @@ def test_infer_site_weighting_changes_overlap_result(tmp_path, monkeypatch) -> N
 
     assert t1[("A", 102)] == pytest.approx(exp, rel=1e-6, abs=1e-6)
     assert t1[("A", 102)] != pytest.approx(t0[("A", 102)], rel=1e-9, abs=1e-9)
+
+
+def test_binary_batch_accuracy_from_logits() -> None:
+    logits = torch.tensor([[-1.0, 2.0, 0.0, -0.1]])
+    labels = torch.tensor([[0.0, 0.0, 1.0, 1.0]])
+
+    accuracy = unet_mod._binary_batch_accuracy_from_logits(logits, labels)
+
+    assert accuracy == 0.5
+
+
+def test_binary_batch_accuracy_from_logits_zero_logit_is_positive() -> None:
+    logits = torch.tensor([[0.0, -0.0, 1e-12, -1e-12]])
+    labels = torch.tensor([[1.0, 1.0, 1.0, 0.0]])
+
+    accuracy = unet_mod._binary_batch_accuracy_from_logits(logits, labels)
+
+    assert accuracy == 1.0
