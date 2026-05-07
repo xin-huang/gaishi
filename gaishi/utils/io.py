@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 import h5py
 import multiprocessing
@@ -64,17 +63,17 @@ def write_h5(
 
     This function appends one or more entries into a pre-initialized HDF5 file opened in
     append/update mode by the caller (typically mode "a" inside the function). It writes
-    only model inputs and, for ``ds_type="train"``, the supervision targets. Prediction
+    only model inputs and, for `ds_type="train"`, the supervision targets. Prediction
     outputs such as logits are not written here.
 
     Data are stored in a unified, slice-friendly layout where the first dimension indexes
     replicates or windows. Sample order may differ between entries due to per-entry sorting.
-    Therefore, per-entry row identity is stored as integer ids (``/index/ref_ids`` and
-    ``/index/tgt_ids``) that point to global sample tables stored once in ``/meta``.
+    Therefore, per-entry row identity is stored as integer ids (`/index/ref_ids` and
+    `/index/tgt_ids`) that point to global sample tables stored once in `/meta`.
 
     This function assumes the file has already been initialized (datasets created and
-    ``/meta`` attributes present, including ``n`` and ``n_written``). New entries are written
-    starting at ``row = /meta.attrs["n_written"]`` and ``n_written`` is incremented accordingly.
+    `/meta` attributes present, including `n` and `n_written`). New entries are written
+    starting at `row = /meta.attrs["n_written"]` and `n_written` is incremented accordingly.
 
     Parameters
     ----------
@@ -83,21 +82,21 @@ def write_h5(
     entries : Mapping[str, Any] or Sequence[Mapping[str, Any]]
         One entry or a list of entries. Each entry corresponds to one replicate/window.
 
-        Required keys for both ``ds_type="train"`` and ``ds_type="infer"``:
-        - ``Ref_genotype`` : array_like, shape (N, L)
-        - ``Tgt_genotype`` : array_like, shape (N, L)
-        - ``Gap_to_prev``  : array_like, shape (N, L)
-        - ``Gap_to_next``  : array_like, shape (N, L)
-        - ``Ref_sample``   : sequence of length N, sample names in row order
-        - ``Tgt_sample``   : sequence of length N, sample names in row order
+        Required keys for both `ds_type="train"` and `ds_type="infer"`:
+        - `Ref_genotype` : array_like, shape (N, L)
+        - `Tgt_genotype` : array_like, shape (N, L)
+        - `Gap_to_prev`  : array_like, shape (N, L)
+        - `Gap_to_next`  : array_like, shape (N, L)
+        - `Ref_sample`   : sequence of length N, sample names in row order
+        - `Tgt_sample`   : sequence of length N, sample names in row order
 
-        Additional required keys for ``ds_type="train"``:
-        - ``Label``     : array_like, shape (N, L)
-        - ``Seed``      : scalar
-        - ``Replicate`` : scalar
+        Additional required keys for `ds_type="train"`:
+        - `Label`     : array_like, shape (N, L)
+        - `Seed`      : scalar
+        - `Replicate` : scalar
 
-        Additional required keys for ``ds_type="infer"``:
-        - ``Position``  : array_like, shape (L,)
+        Additional required keys for `ds_type="infer"`:
+        - `Position`  : array_like, shape (L,)
     ds_type : {"train", "infer"}
         Dataset type. Controls whether training targets or inference coordinates are written.
     lock : multiprocessing.Lock
@@ -105,28 +104,28 @@ def write_h5(
 
     Notes
     -----
-    Expected HDF5 schema (created elsewhere, e.g. by ``initialize_h5``).
+    Expected HDF5 schema (created elsewhere, e.g. by `initialize_h5`).
 
     Common datasets
-    - ``/data/Ref_genotype``  : uint32, shape (n, N, L)
-    - ``/data/Tgt_genotype``  : uint32, shape (n, N, L)
-    - ``/data/Gap_to_prev``   : int64,  shape (n, N, L)
-    - ``/data/Gap_to_next``   : int64,  shape (n, N, L)
-    - ``/index/ref_ids``      : uint32, shape (n, N)
-    - ``/index/tgt_ids``      : uint32, shape (n, N)
-    - ``/meta/ref_sample_table`` : utf-8 strings, shape (K_ref,)
-    - ``/meta/tgt_sample_table`` : utf-8 strings, shape (K_tgt,)
-    - ``/meta`` attributes: ``n``, ``N``, ``L``, ``Chromosome``, ``n_written``
+    - `/data/Ref_genotype`  : uint32, shape (n, N, L)
+    - `/data/Tgt_genotype`  : uint32, shape (n, N, L)
+    - `/data/Gap_to_prev`   : int64,  shape (n, N, L)
+    - `/data/Gap_to_next`   : int64,  shape (n, N, L)
+    - `/index/ref_ids`      : uint32, shape (n, N)
+    - `/index/tgt_ids`      : uint32, shape (n, N)
+    - `/meta/ref_sample_table` : utf-8 strings, shape (K_ref,)
+    - `/meta/tgt_sample_table` : utf-8 strings, shape (K_tgt,)
+    - `/meta` attributes: `n`, `N`, `L`, `Chromosome`, `n_written`
 
-    Training-only datasets (``ds_type="train"``)
-    - ``/targets/Label``      : uint8,  shape (n, N, L)
-    - ``/index/Seed``         : int64,  shape (n,)
-    - ``/index/Replicate``    : int64,  shape (n,)
+    Training-only datasets (`ds_type="train"`)
+    - `/targets/Label`      : uint8,  shape (n, N, L)
+    - `/index/Seed`         : int64,  shape (n,)
+    - `/index/Replicate`    : int64,  shape (n,)
 
-    Inference-only datasets (``ds_type="infer"``)
-    - ``/coords/Position``    : int64,  shape (n, L)
+    Inference-only datasets (`ds_type="infer"`)
+    - `/coords/Position`    : int64,  shape (n, L)
 
-    The integer row id arrays map each row in ``Ref_genotype`` and ``Tgt_genotype`` back to
+    The integer row id arrays map each row in `Ref_genotype` and `Tgt_genotype` back to
     the global sample tables. This preserves per-entry sorting while still allowing efficient
     slicing across entries.
     """
@@ -293,8 +292,8 @@ def initialize_h5(
         Reference sample name table written once to /meta/ref_sample_table.
     tgt_table : list[str]
         Target sample name table written once to /meta/tgt_sample_table.
-    compression : str, default "lzf"
-        HDF5 dataset compression filter.
+    compression : str, optional
+        HDF5 dataset compression filter. Default: "lzf".
 
     Raises
     ------

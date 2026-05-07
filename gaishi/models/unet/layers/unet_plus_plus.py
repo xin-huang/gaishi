@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,7 +17,6 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 import torch
 import torch.nn as nn
 from gaishi.models.unet.layers import ResidualConcatBlock
@@ -32,8 +31,8 @@ class UNetPlusPlus(nn.Module):
     from earlier nodes at the same resolution are concatenated with an upsampled feature map
     from the next deeper resolution, then processed by a convolutional block.
 
-    The network uses ``ResidualConcatBlock`` at each grid node. With the default block setting
-    (``n_layers=2``), each node produces the expected channel dimension for the predefined
+    The network uses `ResidualConcatBlock` at each grid node. With the default block setting
+    (`n_layers=2`), each node produces the expected channel dimension for the predefined
     channel schedule.
 
     Parameters
@@ -46,15 +45,15 @@ class UNetPlusPlus(nn.Module):
     Returns
     -------
     torch.Tensor
-        Model output logits ``(B, num_classes, H, W)``.
+        Model output logits `(B, num_classes, H, W)`.
 
     Notes
     -----
     - Downsampling is performed by max pooling with stride 2.
     - Upsampling is performed by bilinear interpolation with scale factor 2.
-    - The nested structure is expressed by nodes of the form ``x_{i,j}``, where ``i`` is
-      the depth (downsampling level) and ``j`` is the decoder stage at the same resolution.
-      The top row nodes ``x_{0,1}`` ... ``x_{0,4}`` progressively concatenate earlier top-row
+    - The nested structure is expressed by nodes of the form `x_{i,j}`, where `i` is
+      the depth (downsampling level) and `j` is the decoder stage at the same resolution.
+      The top row nodes `x_{0,1}` ... `x_{0,4}` progressively concatenate earlier top-row
       outputs, forming dense skip connections.
 
     Attributes
@@ -64,7 +63,7 @@ class UNetPlusPlus(nn.Module):
     upsample : torch.nn.Module
         Bilinear upsampling layer used for upsampling.
     output_head : torch.nn.Conv2d
-        Final ``1x1`` convolution mapping features to logits.
+        Final `1x1` convolution mapping features to logits.
     """
 
     def __init__(self, num_classes: int, input_channels: int):
@@ -126,12 +125,12 @@ class UNetPlusPlus(nn.Module):
         Parameters
         ----------
         x : torch.Tensor
-            Input tensor of shape ``(B, input_channels, H, W)``.
+            Input tensor of shape `(B, input_channels, H, W)`.
 
         Returns
         -------
         torch.Tensor
-            Output logits ``(B, num_classes, H, W)``.
+            Output logits `(B, num_classes, H, W)`.
         """
         feat00 = self.node00(x)
         feat10 = self.node10(self.downsample(feat00))

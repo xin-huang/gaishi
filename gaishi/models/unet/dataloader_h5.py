@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 from __future__ import annotations
 
@@ -62,19 +61,19 @@ class H5Dataset(Dataset):
     ----------
     h5_file : str
         Path to the HDF5 file.
-    indices : Optional[Sequence[int]], default=None
+    indices : Optional[Sequence[int]], optional
         Subset of replicate indices to expose. If None, the dataset spans
-        all replicates `0..R-1`.
-    channels : int, default=4
-        Number of input channels to return. Must be 2 or 4.
+        all replicates `0..R-1`. Default: None.
+    channels : int, optional
+        Number of input channels to return. Must be 2 or 4. Default: 4.
 
         - If 2: returns `[Ref_genotype, Tgt_genotype]`
         - If 4: returns `[Ref_genotype, Tgt_genotype, Gap_to_prev, Gap_to_next]`
-    require_labels : bool, default=True
+    require_labels : bool, optional
         If True, raises a KeyError when `/targets/Label` is absent. If False,
-        returns `y=None` when labels are missing.
-    x_dtype : numpy.dtype, default=numpy.int32
-        Output dtype for `x` after stacking.
+        returns `y=None` when labels are missing. Default: True.
+    x_dtype : numpy.dtype, optional
+        Output dtype for `x` after stacking. Default: `numpy.int32`.
 
     Returns
     -------
@@ -176,13 +175,13 @@ def make_h5_collate_fn(
 
     Parameters
     ----------
-    label_smooth : bool, default=False
-        Whether to apply label smoothing/noise to the stacked labels.
-    label_noise : float, default=0.01
-        Maximum noise amplitude used when `label_smooth=True`.
-    rng : Optional[numpy.random.Generator], default=None
+    label_smooth : bool, optional
+        Whether to apply label smoothing/noise to the stacked labels. Default: False.
+    label_noise : float, optional
+        Maximum noise amplitude used when `label_smooth=True`. Default: 0.01.
+    rng : Optional[numpy.random.Generator], optional
         RNG used to sample smoothing noise. If None, a new default generator
-        is created.
+        is created. Default: None.
 
     Returns
     -------
@@ -266,39 +265,39 @@ def build_dataloaders_from_h5(
         Number of input channels (2 or 4). Passed to `H5Dataset`.
     batch_size : int
         Batch size for both loaders.
-    val_prop : float, default=0.05
+    val_prop : float, optional
         Proportion of replicates assigned to validation.
-        The validation size is `int(n_total * val_prop)`.
-    num_workers : int, default=0
-        Number of DataLoader worker processes.
-    pin_memory : bool, default=True
-        Whether to enable pinned memory in the DataLoaders.
-    seed : Optional[int], default=None
+        The validation size is `int(n_total * val_prop)`. Default: 0.05.
+    num_workers : int, optional
+        Number of DataLoader worker processes. Default: 0.
+    pin_memory : bool, optional
+        Whether to enable pinned memory in the DataLoaders. Default: True.
+    seed : int, optional
         Seed for the deterministic split (PyTorch generator). Also used to seed
-        NumPy RNGs for label smoothing (`seed` for train, `seed + 1` for val).
-    train_label_smooth : bool, default=True
-        Whether to apply label smoothing/noise in the training collate function.
-    train_label_noise : float, default=0.01
-        Maximum smoothing noise amplitude used when `train_label_smooth=True`.
-    train_drop_last : bool, default=True
-        Whether to drop the final incomplete batch in the training DataLoader.
-    val_drop_last : bool, default=False
-        Whether to drop the final incomplete batch in the validation DataLoader.
-    persistent_workers : bool, default=False
+        NumPy RNGs for label smoothing (`seed` for train, `seed + 1` for val). Default: 0.
+    train_label_smooth : bool, optional
+        Whether to apply label smoothing/noise in the training collate function. Default: True.
+    train_label_noise : float, optional
+        Maximum smoothing noise amplitude used when `train_label_smooth=True`. Default: 0.01.
+    train_drop_last : bool, optional
+        Whether to drop the final incomplete batch in the training DataLoader. Default: True.
+    val_drop_last : bool, optional
+        Whether to drop the final incomplete batch in the validation DataLoader. Default: False.
+    persistent_workers : bool, optional
         Whether to keep DataLoader worker processes alive across epochs.
-        Applied only when ``num_workers > 0``.
-    prefetch_factor : int, default=2
+        Applied only when `num_workers > 0`. Default: False.
+    prefetch_factor : int, optional
         Number of batches prefetched by each worker. Must be a positive
-        integer. Applied only when ``num_workers > 0``.
+        integer. Applied only when `num_workers > 0`. Default: 2.
 
     Returns
     -------
     train_loader : torch.utils.data.DataLoader
         Training loader built from the training subset. Uses `shuffle=True` and
-        configurable `drop_last` via ``train_drop_last``.
+        configurable `drop_last` via `train_drop_last`.
     val_loader : torch.utils.data.DataLoader
         Validation loader built from the validation subset. Uses `shuffle=False`
-        and configurable `drop_last` via ``val_drop_last``.
+        and configurable `drop_last` via `val_drop_last`.
     train_indices : list[int]
         Replicate indices (into the base dataset) assigned to training.
         This is `train_subset.indices` from the `Subset` returned by `random_split`.
@@ -312,10 +311,10 @@ def build_dataloaders_from_h5(
     - Shuffling order within the training loader is controlled by PyTorch; set
       `torch.manual_seed(...)` externally if you need deterministic per-epoch
       shuffling in tests.
-    - ``drop_last`` behavior is configurable per loader via ``train_drop_last`` and
-      ``val_drop_last``.
-    - ``persistent_workers`` and ``prefetch_factor`` are only passed when
-      ``num_workers > 0``. This avoids invalid DataLoader configurations in
+    - `drop_last` behavior is configurable per loader via `train_drop_last` and
+      `val_drop_last`.
+    - `persistent_workers` and `prefetch_factor` are only passed when
+      `num_workers > 0`. This avoids invalid DataLoader configurations in
       single-process loading mode and allows tuning worker startup/prefetch
       overhead for potential throughput gains in multi-worker runs.
     """

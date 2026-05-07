@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -16,7 +16,6 @@
 # along with this program. If not, please see
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
-
 
 import numpy as np
 from typing import Dict, Any, List
@@ -102,12 +101,12 @@ class Sstar(GenericStatistic):
             (n_sites, n_samples) target genotype matrix.
         pos : np.ndarray
             Positions of length n_sites (same row order as tgt_gt).
-        match_bonus : int
-            Bonus for pairs with gd==0 and distance ≥ 10.
-        max_mismatch : int
-            Maximum gd allowed for a mismatch pair.
-        mismatch_penalty : int
-            Penalty for 0 < gd ≤ max_mismatch; pairs with gd > max_mismatch are invalid.
+        match_bonus : int, optional
+            Bonus for pairs with gd==0 and distance ≥ 10. Default: 5000.
+        max_mismatch : int, optional
+            Maximum gd allowed for a mismatch pair. Default: 5.
+        mismatch_penalty : int, optional
+            Penalty for 0 < gd ≤ max_mismatch; pairs with gd > max_mismatch are invalid. Default: -10000.
 
         Returns
         -------

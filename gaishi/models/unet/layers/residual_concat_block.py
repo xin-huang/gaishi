@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,7 +17,6 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 import torch
 import torch.nn as nn
 
@@ -26,7 +25,7 @@ class ResidualConcatBlock(nn.Module):
     """
     Convolutional block with residual accumulation and channel-wise concatenation.
 
-    This block applies a stack of ``n_layers`` 2D convolutions. Each convolution is followed
+    This block applies a stack of `n_layers` 2D convolutions. Each convolution is followed
     by instance normalization and spatial dropout. Starting from the second layer, a residual
     connection is applied within the block by adding the current layer output to the previous
     layer output. Finally, outputs from all layers are concatenated along the channel dimension
@@ -39,24 +38,24 @@ class ResidualConcatBlock(nn.Module):
     out_channels : int
         Number of output channels of each convolutional layer inside the block.
     k : int
-        Convolution kernel size (square kernel ``k x k``). Default: 3.
+        Convolution kernel size (square kernel `k x k`). Default: 3.
 
     Returns
     -------
     torch.Tensor
-        Output tensor of shape ``(B, out_channels * n_layers, H, W)``.
+        Output tensor of shape `(B, out_channels * n_layers, H, W)`.
 
     Raises
     ------
     ValueError
-        If ``k < 1``.
+        If `k < 1`.
     ValueError
-        If ``k`` is even.
+        If `k` is even.
 
     Notes
     -----
-    - The output channel dimension equals ``out_channels * n_layers`` due to concatenation.
-    - Padding is set to keep spatial resolution unchanged for odd ``k``.
+    - The output channel dimension equals `out_channels * n_layers` due to concatenation.
+    - Padding is set to keep spatial resolution unchanged for odd `k`.
     - This block is often used in encoder-decoder architectures where the channel expansion
       from concatenation is expected downstream.
 
@@ -115,12 +114,12 @@ class ResidualConcatBlock(nn.Module):
         Parameters
         ----------
         x : torch.Tensor
-            Input tensor of shape ``(B, C_in, H, W)``.
+            Input tensor of shape `(B, C_in, H, W)`.
 
         Returns
         -------
         torch.Tensor
-            Output tensor of shape ``(B, out_channels * n_layers, H, W)``.
+            Output tensor of shape `(B, out_channels * n_layers, H, W)`.
         """
         layer_outputs = [self.post_layers[0](self.conv_layers[0](x))]
 

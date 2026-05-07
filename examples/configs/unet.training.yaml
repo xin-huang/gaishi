@@ -21,7 +21,7 @@ simulation:
 model:
   name: "unet++"
   params:
-    add_channels: False,
+    add_rnn: False,
     n_classes: 1,
     learning_rate: 0.001,
     batch_size: 32,

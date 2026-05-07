@@ -1,4 +1,4 @@
-# Copyright 2025 Xin Huang
+# Copyright 2026 Xin Huang
 #
 # GNU General Public License v3.0
 #
@@ -17,14 +17,12 @@
 #
 #    https://www.gnu.org/licenses/gpl-3.0.en.html
 
-
 import inspect, joblib, os
 import pandas as pd
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.preprocessing import StandardScaler
 from gaishi.models import MlModel
 from gaishi.registries.model_registry import MODEL_REGISTRY
-
 
 pd.options.mode.chained_assignment = None
 
@@ -109,7 +107,7 @@ class EtcModel(MlModel):
         Any keyword arguments in `model_params` are forwarded to the underlying
         :class:`sklearn.ensemble.ExtraTreesClassifier` or used to control
         optional preprocessing. If an `is_scaled` flag is provided and set to
-        True, a scaler object is loaded from ``<model>.scaler`` and applied to
+        True, a scaler object is loaded from `<model>.scaler` and applied to
         the feature matrix before inference.
 
         Parameters
@@ -121,8 +119,8 @@ class EtcModel(MlModel):
             prediction.
         model : str
             Path to the saved trained model (e.g. a joblib pickle). If
-            ``is_scaled=True`` is passed via `model_params`, the method will
-            also look for a corresponding scaler file at ``<model>.scaler`` and
+            `is_scaled=True` is passed via `model_params`, the method will
+            also look for a corresponding scaler file at `<model>.scaler` and
             apply it to the features.
         output : str
             Path where the inference output (e.g. predicted labels or
