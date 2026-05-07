@@ -760,3 +760,77 @@ def test_binary_batch_accuracy_from_logits_zero_logit_is_positive() -> None:
     accuracy = unet_mod._binary_batch_accuracy_from_logits(logits, labels)
 
     assert accuracy == 1.0
+
+
+def test_train_passes_worker_perf_kwargs_to_dataloader(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+
+    training_data = _make_training_h5(tmp_path, n_reps=10, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_workers_kwargs" / "best.safetensors"
+
+    captured = {}
+
+    def _fake_build_dataloaders_from_h5(**kwargs):
+        captured.update(kwargs)
+        raise RuntimeError("stop_after_capture")
+
+    monkeypatch.setattr(
+        unet_mod, "build_dataloaders_from_h5", _fake_build_dataloaders_from_h5
+    )
+
+    with pytest.raises(RuntimeError, match="stop_after_capture"):
+        unet_mod.UNetModel.train(
+            data=training_data,
+            output=str(model_path),
+            add_rnn=False,
+            batch_size=2,
+            n_epochs=1,
+            n_early=0,
+            min_delta=0.0,
+            val_prop=0.2,
+            seed=0,
+            num_workers=0,
+            persistent_workers=True,
+            prefetch_factor=5,
+        )
+
+    assert captured["persistent_workers"] is True
+    assert captured["prefetch_factor"] == 5
+
+
+def test_train_uses_dataloader_worker_perf_defaults_when_none(
+    tmp_path, monkeypatch
+) -> None:
+    monkeypatch.setattr(unet_mod, "UNetPlusPlus", DummyUNetPlusPlus)
+    monkeypatch.setattr(unet_mod, "UNetPlusPlusRNN", DummyUNetPlusPlusRNN)
+
+    training_data = _make_training_h5(tmp_path, n_reps=10, N=2, L=7, with_gaps=True)
+    model_path = tmp_path / "model_out_workers_defaults" / "best.safetensors"
+
+    captured = {}
+
+    def _fake_build_dataloaders_from_h5(**kwargs):
+        captured.update(kwargs)
+        raise RuntimeError("stop_after_capture")
+
+    monkeypatch.setattr(
+        unet_mod, "build_dataloaders_from_h5", _fake_build_dataloaders_from_h5
+    )
+
+    with pytest.raises(RuntimeError, match="stop_after_capture"):
+        unet_mod.UNetModel.train(
+            data=training_data,
+            output=str(model_path),
+            add_rnn=False,
+            batch_size=2,
+            n_epochs=1,
+            n_early=0,
+            min_delta=0.0,
+            val_prop=0.2,
+            seed=0,
+            num_workers=0,
+        )
+
+    assert "persistent_workers" not in captured
+    assert "prefetch_factor" not in captured

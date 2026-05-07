@@ -311,3 +311,84 @@ def test_build_dataloaders_from_h5_drop_last_flags(h5_with_labels):
 
     assert len(train_loader) == (n_train + batch_size - 1) // batch_size
     assert len(val_loader) == n_val // batch_size
+
+
+def test_build_dataloaders_num_workers_zero_ignores_worker_perf_kwargs(h5_with_labels):
+    path, _ = h5_with_labels
+
+    train_loader, val_loader, _, _ = build_dataloaders_from_h5(
+        h5_file=path,
+        channels=2,
+        batch_size=2,
+        num_workers=0,
+        persistent_workers=True,
+        prefetch_factor=4,
+    )
+
+    assert train_loader.num_workers == 0
+    assert val_loader.num_workers == 0
+
+
+def test_build_dataloaders_num_workers_gt_zero_forwards_worker_perf_kwargs(
+    h5_with_labels, monkeypatch
+):
+    path, _ = h5_with_labels
+    captured = []
+
+    real_dataloader = __import__(
+        "gaishi.models.unet.dataloader_h5", fromlist=["DataLoader"]
+    ).DataLoader
+
+    def _capture_dataloader(*args, **kwargs):
+        captured.append(kwargs.copy())
+        kwargs.pop("persistent_workers", None)
+        kwargs.pop("prefetch_factor", None)
+        kwargs["num_workers"] = 0
+        return real_dataloader(*args, **kwargs)
+
+    monkeypatch.setattr(
+        "gaishi.models.unet.dataloader_h5.DataLoader", _capture_dataloader
+    )
+
+    build_dataloaders_from_h5(
+        h5_file=path,
+        channels=2,
+        batch_size=2,
+        num_workers=1,
+        persistent_workers=True,
+        prefetch_factor=3,
+    )
+
+    assert len(captured) == 2
+    assert all(kwargs["persistent_workers"] is True for kwargs in captured)
+    assert all(kwargs["prefetch_factor"] == 3 for kwargs in captured)
+
+
+def test_build_dataloaders_invalid_prefetch_factor_raises(h5_with_labels):
+    path, _ = h5_with_labels
+
+    with pytest.raises(ValueError, match="prefetch_factor"):
+        build_dataloaders_from_h5(
+            h5_file=path,
+            channels=2,
+            batch_size=2,
+            num_workers=1,
+            prefetch_factor=0,
+        )
+
+
+def test_build_dataloaders_num_workers_zero_ignores_invalid_prefetch_factor(
+    h5_with_labels,
+):
+    path, _ = h5_with_labels
+
+    train_loader, val_loader, _, _ = build_dataloaders_from_h5(
+        h5_file=path,
+        channels=2,
+        batch_size=2,
+        num_workers=0,
+        prefetch_factor=0,
+    )
+
+    assert train_loader.num_workers == 0
+    assert val_loader.num_workers == 0

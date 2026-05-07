@@ -245,6 +245,8 @@ def build_dataloaders_from_h5(
     train_label_noise: float = 0.01,
     train_drop_last: bool = True,
     val_drop_last: bool = False,
+    persistent_workers: bool = False,
+    prefetch_factor: int = 2,
 ) -> Tuple[DataLoader, DataLoader, List[int], List[int]]:
     """
     Construct train/validation DataLoaders from an HDF5 file via `torch.random_split`.
@@ -282,6 +284,12 @@ def build_dataloaders_from_h5(
         Whether to drop the final incomplete batch in the training DataLoader.
     val_drop_last : bool, default=False
         Whether to drop the final incomplete batch in the validation DataLoader.
+    persistent_workers : bool, default=False
+        Whether to keep DataLoader worker processes alive across epochs.
+        Applied only when ``num_workers > 0``.
+    prefetch_factor : int, default=2
+        Number of batches prefetched by each worker. Must be a positive
+        integer. Applied only when ``num_workers > 0``.
 
     Returns
     -------
@@ -306,6 +314,10 @@ def build_dataloaders_from_h5(
       shuffling in tests.
     - ``drop_last`` behavior is configurable per loader via ``train_drop_last`` and
       ``val_drop_last``.
+    - ``persistent_workers`` and ``prefetch_factor`` are only passed when
+      ``num_workers > 0``. This avoids invalid DataLoader configurations in
+      single-process loading mode and allows tuning worker startup/prefetch
+      overhead for potential throughput gains in multi-worker runs.
     """
     # Base dataset over all replicates/windows
     base_ds = H5Dataset(
@@ -332,6 +344,19 @@ def build_dataloaders_from_h5(
 
     train_ds, val_ds = random_split(base_ds, [n_train, n_val], generator=g)
 
+    if num_workers == 0 and persistent_workers:
+        persistent_workers = False
+
+    loader_worker_kwargs = {}
+    if num_workers > 0:
+        if not isinstance(prefetch_factor, int) or prefetch_factor <= 0:
+            raise ValueError("`prefetch_factor` must be a positive integer.")
+
+        loader_worker_kwargs = {
+            "persistent_workers": persistent_workers,
+            "prefetch_factor": prefetch_factor,
+        }
+
     train_loader = DataLoader(
         train_ds,
         batch_size=batch_size,
@@ -344,6 +369,7 @@ def build_dataloaders_from_h5(
             label_noise=train_label_noise,
             rng=train_rng,
         ),
+        **loader_worker_kwargs,
     )
 
     val_loader = DataLoader(
@@ -357,6 +383,7 @@ def build_dataloaders_from_h5(
             label_smooth=False,
             rng=val_rng,
         ),
+        **loader_worker_kwargs,
     )
 
     return train_loader, val_loader, train_ds.indices, val_ds.indices
