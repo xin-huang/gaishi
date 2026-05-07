@@ -25,8 +25,6 @@ import numpy as np
 import torch
 import torch.optim as optim
 from safetensors.torch import load_file, save_file
-from scipy.special import expit
-from sklearn.metrics import accuracy_score
 from torch.nn import BCEWithLogitsLoss
 
 from gaishi.models import MlModel
@@ -281,10 +279,7 @@ class UNetModel(MlModel):
 
                 losses.append(loss.item())
 
-                y_pred_bin = np.round(expit(y_pred.detach().cpu().numpy().flatten()))
-                y_bin = np.round(y.detach().cpu().numpy().flatten())
-
-                accuracies.append(accuracy_score(y_bin.flatten(), y_pred_bin.flatten()))
+                accuracies.append(_binary_batch_accuracy_from_logits(y_pred, y))
 
                 mean_loss = np.mean(losses)
                 mean_acc = np.mean(accuracies)
@@ -307,14 +302,7 @@ class UNetModel(MlModel):
                     y_pred = net(x)
                     loss = criterion(y_pred, y)
 
-                    y_pred_bin = np.round(
-                        expit(y_pred.detach().cpu().numpy().flatten())
-                    )
-                    y_bin = np.round(y.detach().cpu().numpy().flatten())
-
-                    val_accs.append(
-                        accuracy_score(y_bin.flatten(), y_pred_bin.flatten())
-                    )
+                    val_accs.append(_binary_batch_accuracy_from_logits(y_pred, y))
                     val_losses.append(loss.detach().item())
 
             val_loss = np.mean(val_losses)
@@ -591,3 +579,23 @@ def _gaussian_weights(window_size: int, sigma: float = 30.0) -> np.ndarray:
     )
     m = float(g.max())
     return g / m if m > 0 else g
+
+
+def _binary_batch_accuracy_from_logits(
+    logits: torch.Tensor, targets: torch.Tensor
+) -> float:
+    """
+    Compute binary batch accuracy.
+
+    Parameters
+    ----------
+    logits : torch.Tensor
+        Binary classification logits.
+    targets : torch.Tensor
+        Binary targets encoded as 0/1 values.
+    """
+    preds = logits >= 0
+    target_bin = targets >= 0.5
+    correct = preds == target_bin
+
+    return correct.sum().item() / correct.numel()
