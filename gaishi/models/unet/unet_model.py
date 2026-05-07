@@ -25,6 +25,7 @@ import numpy as np
 import torch
 import torch.optim as optim
 from safetensors.torch import load_file, save_file
+from torch.cuda.amp import GradScaler, autocast
 from torch.nn import BCEWithLogitsLoss
 
 from gaishi.models import MlModel
@@ -67,6 +68,7 @@ class UNetModel(MlModel):
         num_workers: int = 0,
         train_drop_last: Optional[bool] = None,
         val_drop_last: Optional[bool] = None,
+        use_amp: bool = False,
         **kwargs,
     ) -> None:
         """
@@ -161,6 +163,10 @@ class UNetModel(MlModel):
         val_drop_last : Optional[bool], optional
             Whether to drop the final incomplete batch in the validation DataLoader.
             If None, use ``build_dataloaders_from_h5`` default. Default: None.
+        use_amp : bool, optional
+            Enable CUDA AMP training/inference execution path. When True and CUDA is
+            used, forward/loss runs under autocast and backpropagation uses
+            ``GradScaler``. Default: False.
 
         Raises
         ------
@@ -255,6 +261,8 @@ class UNetModel(MlModel):
 
         criterion = BCEWithLogitsLoss(pos_weight=torch.FloatTensor([ratio]).to(device))
         optimizer = optim.Adam(net.parameters(), lr=float(learning_rate))
+        amp_enabled = bool(use_amp and dev.type == "cuda")
+        scaler = GradScaler(enabled=amp_enabled)
 
         min_val_loss = np.inf
         early_count = 0
@@ -271,11 +279,17 @@ class UNetModel(MlModel):
                 x = x.to(device, non_blocking=True)
                 y = y.to(device, non_blocking=True).float()
 
-                y_pred = net(x)
+                with autocast(enabled=amp_enabled):
+                    y_pred = net(x)
+                    loss = criterion(y_pred, y)
 
-                loss = criterion(y_pred, y)
-                loss.backward()
-                optimizer.step()
+                if amp_enabled:
+                    scaler.scale(loss).backward()
+                    scaler.step(optimizer)
+                    scaler.update()
+                else:
+                    loss.backward()
+                    optimizer.step()
 
                 losses.append(loss.item())
 
@@ -299,8 +313,9 @@ class UNetModel(MlModel):
                     x = x.to(device, non_blocking=True)
                     y = y.to(device, non_blocking=True).float()
 
-                    y_pred = net(x)
-                    loss = criterion(y_pred, y)
+                    with autocast(enabled=amp_enabled):
+                        y_pred = net(x)
+                        loss = criterion(y_pred, y)
 
                     val_accs.append(_binary_batch_accuracy_from_logits(y_pred, y))
                     val_losses.append(loss.detach().item())
