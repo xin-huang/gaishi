@@ -24,7 +24,7 @@ from gaishi.generators import GenericGenerator
 
 class WindowDataGenerator(GenericGenerator):
     """
-    Generates genomic data for each specified window from VCF and other related files.
+    Generate genomic data for each specified window from VCF and other related files.
     """
 
     def __init__(
@@ -40,7 +40,7 @@ class WindowDataGenerator(GenericGenerator):
         is_phased: bool = True,
     ):
         """
-        Initializes a new instance of WindowDataGenerator.
+        Initialize a new instance of WindowDataGenerator.
 
         Parameters
         ----------

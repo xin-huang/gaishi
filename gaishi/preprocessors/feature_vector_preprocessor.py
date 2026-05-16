@@ -38,7 +38,7 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
 
     def __init__(self, ref_ind_file: str, tgt_ind_file: str, feature_config_file: str):
         """
-        Initializes a new instance of FeatureVectorsPreprocessor with specific parameters.
+        Initialize a new instance of FeatureVectorsPreprocessor with specific parameters.
 
         Parameters:
         -----------
@@ -108,7 +108,7 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
         pos : np.ndarray
             Array of variant positions within the genomic window.
 
-        Returns
+        Return
         -------
         list
             A list of dictionaries containing the formatted feature vectors for the genomic window.
@@ -163,7 +163,7 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
         is_phased : bool
             Indicates whether the genomic data is phased.
 
-        Returns
+        Return
         -------
         list
             A list of dictionaries containing the formatted results with one row per sample and one column per feature.
@@ -234,7 +234,7 @@ class FeatureVectorPreprocessor(GenericPreprocessor):
         pop : str
             Indicates the population type ('Ref' or 'Tgt') for which distances are being formatted.
 
-        Returns
+        Return
         -------
         dict[str, float]
             A dictionary with keys for each distance-related feature and values for the current sample.

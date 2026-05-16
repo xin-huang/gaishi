@@ -40,7 +40,7 @@ def _run_infer(args: argparse.Namespace) -> None:
 
 def add_infer_parser(subparsers: argparse.ArgumentParser) -> None:
     """
-    Initializes and configures the command-line interface parser
+    Initialize and configure the command-line interface parser
     for the infer subcommand.
 
     Parameters

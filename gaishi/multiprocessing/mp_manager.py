@@ -125,7 +125,7 @@ def mp_manager(
         Additional keyword arguments to be passed directly to the job function. These are
         forwarded as-is to each job invocation.
 
-    Returns
+    Return
     -------
     res : list
         A list of collected results from each executed job.

@@ -46,7 +46,7 @@ class GenericSimulator(ABC):
         output_dir: str,
     ):
         """
-        Initializes a new instance of the DataSimulator class with specified parameters for data simulation.
+        Initialize a new instance of the DataSimulator class with specified parameters for data simulation.
 
         Parameters
         ----------
@@ -104,7 +104,7 @@ class GenericSimulator(ABC):
         **kwargs : dict
             Keyword arguments containing dynamic parameters for the simulation.
 
-        Returns
+        Return
         -------
         The method can return results or status information if applicable. This depends on the implementation
         details of each subclass.

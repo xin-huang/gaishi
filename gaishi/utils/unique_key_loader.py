@@ -45,7 +45,7 @@ def no_duplicate_keys(
     deep : bool, optional
         Whether to construct nested objects deeply (passed through to the loader). Default: False.
 
-    Returns
+    Return
     -------
     dict
         A Python dictionary built from the mapping node.

@@ -30,7 +30,7 @@ class BinaryAlleleLabeler(GenericLabeler):
 
     def __init__(self, ploidy: int, is_phased: bool, num_polymorphisms: int):
         """
-        Initializes a new instance of BinaryAlleleLabeler with given ploidy, phasing status, and number of polymorphisms.
+        Initialize a new instance of BinaryAlleleLabeler with given ploidy, phasing status, and number of polymorphisms.
 
         Parameters
         ----------
@@ -65,7 +65,7 @@ class BinaryAlleleLabeler(GenericLabeler):
         rep : int, optional
             A repetition identifier (default is None).
 
-        Returns
+        Return
         -------
         dict
             A dictionary with sample names and their corresponding allele labels.

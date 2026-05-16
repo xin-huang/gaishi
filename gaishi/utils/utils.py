@@ -33,7 +33,7 @@ def parse_ind_file(filename: str) -> list[str]:
     filename : str
         Path to the file containing sample information.
 
-    Returns
+    Return
     -------
     list[str]
         Sample information read from the file.
@@ -68,7 +68,7 @@ def read_geno_data(
     filter_missing : bool
         Whether to filter out missing data.
 
-    Returns
+    Return
     -------
     dict
         Genotype data read from the VCF file.
@@ -116,7 +116,7 @@ def filter_data(data: dict, c: str, index: np.ndarray) -> dict:
     index : np.ndarray
         A boolean array determines variants to be removed.
 
-    Returns
+    Return
     -------
     data : dict
         Genotype data after filtering.
@@ -154,7 +154,7 @@ def read_data(
     is_phased : bool
         If True, use phased genotypes; otherwise, use unphased genotypes.
 
-    Returns
+    Return
     -------
     ref_data : dict
         Genotype data from reference populations.
@@ -218,7 +218,7 @@ def get_ref_alt_allele(ref, alt, pos):
         alt list: ALT alleles.
         pos list: Genomic positions.
 
-    Returns:
+    Return:
         ref_allele dict: REF alleles.
         alt_allele dict: ALT alleles.
     """
@@ -243,7 +243,7 @@ def read_anc_allele(anc_allele_file):
     Arguments:
         anc_allele_file str: Name of the BED file containing ancestral allele information.
 
-    Returns:
+    Return:
         anc_allele dict: Ancestral allele information.
     """
     anc_allele = dict()
@@ -285,7 +285,7 @@ def check_anc_allele(
     c : str
         Chromosome name.
 
-    Returns
+    Return
     -------
     dict[str, np.ndarray[Any]]
         Filtered genotype data after ancestral allele checking and genotype flipping
@@ -353,7 +353,7 @@ def split_genome(
     seed : int, optional
         Seed for the random number generator (only used if random_polymorphisms is True). Default: None.
 
-    Returns
+    Return
     -------
     list of tuple
         List of sliding windows along the genome if window_based is True,
@@ -437,7 +437,7 @@ def create_sample_name_list(
     is_phased : bool
         Indicates if the sample names should include phased information.
 
-    Returns
+    Return
     -------
     list of str
         A list of sample names, with phased information if applicable.
@@ -469,7 +469,7 @@ def filter_model_params_for_method(
     model_params : dict
         Candidate keyword arguments from parsed model configuration.
 
-    Returns
+    Return
     -------
     dict
         A filtered dictionary containing only keys accepted by ``model_method``.

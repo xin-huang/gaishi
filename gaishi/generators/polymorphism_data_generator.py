@@ -185,7 +185,7 @@ class PolymorphismDataGenerator(GenericGenerator):
         seed : int, optional
             Seed for random number generation. Default: None.
 
-        Returns
+        Return
         -------
         tuple[np.ndarray, list]
             A tuple containing the upsampled genotype data array
@@ -210,9 +210,9 @@ class PolymorphismDataGenerator(GenericGenerator):
 
     def __len__(self):
         """
-        Returns the number of polymorphism windows.
+        Return the number of polymorphism windows.
 
-        Returns
+        Return
         -------
         int
             Number of polymorphism windows.

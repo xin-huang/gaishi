@@ -48,7 +48,7 @@ class MsprimeSimulator(GenericSimulator):
         is_phased: bool,
     ):
         """
-        Initializes a new instance of MsprimeSimulator with specific parameters for msprime simulations.
+        Initialize a new instance of MsprimeSimulator with specific parameters for msprime simulations.
 
         Parameters
         ----------
@@ -125,7 +125,7 @@ class MsprimeSimulator(GenericSimulator):
             Similar to `rep`, this is not directly set in the constructor but should be specified
             to ensure that simulations can be reproduced exactly. Default: None.
 
-        Returns
+        Return
         -------
         list[dict[str, str]]
             A list of a dictionary containing file paths for the simulated data.
@@ -209,7 +209,7 @@ class MsprimeSimulator(GenericSimulator):
         identifier: str = "tsk_",
     ) -> None:
         """
-        Creates files listing reference and target individual identifiers.
+        Create files listing reference and target individual identifiers.
 
         Parameters
         ----------
@@ -242,7 +242,7 @@ class MsprimeSimulator(GenericSimulator):
         is_phased: bool,
     ) -> str:
         """
-        Generates a string representing the true migration tracts between specified source and target populations within a given tskit.TreeSequence.
+        Generate a string representing the true migration tracts between specified source and target populations within a given tskit.TreeSequence.
 
         Parameters
         ----------
@@ -257,7 +257,7 @@ class MsprimeSimulator(GenericSimulator):
         is_phased : bool
             Indicates whether the data is phased.
 
-        Returns
+        Return
         -------
         tracts : str
             A string containing the tracts information in BED format.

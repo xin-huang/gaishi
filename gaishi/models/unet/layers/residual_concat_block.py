@@ -40,7 +40,7 @@ class ResidualConcatBlock(nn.Module):
     k : int
         Convolution kernel size (square kernel `k x k`). Default: 3.
 
-    Returns
+    Return
     -------
     torch.Tensor
         Output tensor of shape `(B, out_channels * n_layers, H, W)`.
@@ -116,7 +116,7 @@ class ResidualConcatBlock(nn.Module):
         x : torch.Tensor
             Input tensor of shape `(B, C_in, H, W)`.
 
-        Returns
+        Return
         -------
         torch.Tensor
             Output tensor of shape `(B, out_channels * n_layers, H, W)`.

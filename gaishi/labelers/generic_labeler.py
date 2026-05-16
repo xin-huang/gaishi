@@ -31,7 +31,7 @@ class GenericLabeler(ABC):
 
     def __init__(self, ploidy: int, is_phased: bool):
         """
-        Initializes a new DataLabeler instance with the given configuration.
+        Initialize a new DataLabeler instance with the given configuration.
 
         Parameters
         ----------
@@ -67,7 +67,7 @@ class GenericLabeler(ABC):
             over the labeling process. The accepted keys and values depend on
             the specific subclass implementation.
 
-        Returns
+        Return
         -------
         The method can return results or status information if applicable. This depends on the implementation
         details of each subclass.

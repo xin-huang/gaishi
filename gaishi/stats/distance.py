@@ -29,14 +29,14 @@ class Distance(GenericStatistic):
     """
     Pairwise Euclidean distance statistic.
 
-    Computes pairwise Euclidean distances between columns (samples) of two
+    Compute pairwise Euclidean distances between columns (samples) of two
     genotype matrices and returns the result under a caller-provided key.
     """
 
     @staticmethod
     def compute(**kwargs) -> Dict[str, Any]:
         """
-        Computes pairwise Euclidean distances for two genotype matrices.
+        Compute pairwise Euclidean distances for two genotype matrices.
 
         Parameters
         ----------
@@ -48,7 +48,7 @@ class Distance(GenericStatistic):
             key : str
                 The dictionary key to use for the returned distance matrix (e.g., 'ref_dist' or 'tgt_dist').
 
-        Returns
+        Return
         -------
         dict
             A dictionary {key: np.ndarray} where the array has shape
@@ -103,7 +103,7 @@ class Distance(GenericStatistic):
         gt2 : np.ndarray
             Genotype matrix 2 with shape (n_sites, n_samples2).
 
-        Returns
+        Return
         -------
         np.ndarray
             Distance matrix of shape (n_samples2, n_samples1), computed as
@@ -118,7 +118,7 @@ class Distance(GenericStatistic):
 @STAT_REGISTRY.register("ref_dist")
 class RefDistance(GenericStatistic):
     """
-    Computes pairwise Euclidean distances between columns (samples) of the
+    Compute pairwise Euclidean distances between columns (samples) of the
     reference genotype matrix (`ref_gts`) and the target genotype matrix
     (`tgt_gts`).
     """
@@ -126,7 +126,7 @@ class RefDistance(GenericStatistic):
     @staticmethod
     def compute(**kwargs) -> Dict[str, Any]:
         """
-        Computes distances from reference to target samples.
+        Compute distances from reference to target samples.
 
         Parameters
         ----------
@@ -136,7 +136,7 @@ class RefDistance(GenericStatistic):
             tgt_gts : np.ndarray
                 Target genotype matrix of shape `(n_sites, n_tgt_samples)`.
 
-        Returns
+        Return
         -------
         dict
             `{'ref_dist': np.ndarray}` where the array has shape
@@ -156,14 +156,14 @@ class RefDistance(GenericStatistic):
 @STAT_REGISTRY.register("tgt_dist")
 class TgtDistance(GenericStatistic):
     """
-    Computes pairwise Euclidean distances between columns (samples) of the
+    Compute pairwise Euclidean distances between columns (samples) of the
     target genotype matrix (`tgt_gts`) itself.
     """
 
     @staticmethod
     def compute(**kwargs):
         """
-        Computes self-distances among target samples.
+        Compute self-distances among target samples.
 
         Parameters
         ----------
@@ -171,7 +171,7 @@ class TgtDistance(GenericStatistic):
             tgt_gts : np.ndarray
                 Target genotype matrix of shape `(n_sites, n_tgt_samples)`.
 
-        Returns
+        Return
         -------
         dict
             `{'tgt_dist': np.ndarray}` where the array has shape

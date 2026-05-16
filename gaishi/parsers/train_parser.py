@@ -44,7 +44,7 @@ def _run_train(args: argparse.Namespace) -> None:
 
 def add_train_parser(subparsers: argparse.ArgumentParser) -> None:
     """
-    Initializes and configures the command-line interface parser
+    Initialize and configure the command-line interface parser
     for the train subcommand.
 
     Parameters

@@ -33,14 +33,14 @@ class GenericStatistic(ABC):
     @abstractmethod
     def compute(self, **kwargs) -> Dict[str, Any]:
         """
-        Computes the statistic based on the input genotype data.
+        Compute the statistic based on the input genotype data.
 
         Parameters
         ----------
         **kwargs : dict
             Additional keyword arguments specific to the statistic being implemented.
 
-        Returns
+        Return
         -------
         dict
             A dictionary containing the results of the statistic computation.
@@ -59,7 +59,7 @@ class GenericStatistic(ABC):
         *names : str
             One or more required keys to retrieve from `kwargs`.
 
-        Returns
+        Return
         -------
         tuple of Any
             Values corresponding to `names`, in the same order.

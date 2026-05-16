@@ -36,7 +36,7 @@ class PrivateMutation(GenericStatistic):
     @staticmethod
     def compute(**kwargs) -> Dict[str, Any]:
         """
-        Computes per-sample private-variant counts.
+        Compute per-sample private-variant counts.
 
         Parameters
         ----------
@@ -46,7 +46,7 @@ class PrivateMutation(GenericStatistic):
             tgt_gts : np.ndarray
                 Target genotype matrix of shape `(n_sites, n_tgt_samples)`.
 
-        Returns
+        Return
         -------
         dict
             `{private_mutation: np.ndarray}` where the array has length
@@ -79,7 +79,7 @@ class PrivateMutation(GenericStatistic):
         tgt_gt : np.ndarray
             Genotype matrix from the target population `(n_sites, n_tgt_samples)`.
 
-        Returns
+        Return
         -------
         np.ndarray
             Vector of length `n_tgt_samples` with the number of private mutations

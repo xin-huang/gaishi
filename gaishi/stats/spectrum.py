@@ -28,7 +28,7 @@ class Spectrum(GenericStatistic):
     """
     Spectrum statistic.
 
-    Computes per-individual allele-frequency spectra (ArchIE-style i-ton)
+    Compute per-individual allele-frequency spectra (ArchIE-style i-ton)
     from a target population genotype matrix.
 
     Notes
@@ -40,7 +40,7 @@ class Spectrum(GenericStatistic):
     @staticmethod
     def compute(**kwargs) -> Dict[str, Any]:
         """
-        Computes per-individual frequency spectra for the target population.
+        Compute per-individual frequency spectra for the target population.
 
         Parameters
         ----------
@@ -52,7 +52,7 @@ class Spectrum(GenericStatistic):
             ploidy : int
                 Sample ploidy when `is_phased` is `False` (ignored otherwise).
 
-        Returns
+        Return
         -------
         dict
             A dictionary with a single key:
@@ -75,7 +75,7 @@ class Spectrum(GenericStatistic):
     @staticmethod
     def _calc_n_ton(tgt_gt: np.ndarray, is_phased: bool, ploidy: int) -> np.ndarray:
         """
-        Computes individual frequency spectra for samples (ArchIE-style i-ton).
+        Compute individual frequency spectra for samples (ArchIE-style i-ton).
 
         Parameters
         ----------
@@ -86,7 +86,7 @@ class Spectrum(GenericStatistic):
         ploidy : int
             Ploidy of the genomes (ignored when `is_phased` is True).
 
-        Returns
+        Return
         -------
         np.ndarray
             Spectra array of shape (n_samples, n_bins), where

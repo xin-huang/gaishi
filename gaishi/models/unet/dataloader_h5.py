@@ -75,7 +75,7 @@ class H5Dataset(Dataset):
     x_dtype : numpy.dtype, optional
         Output dtype for `x` after stacking. Default: `numpy.int32`.
 
-    Returns
+    Return
     -------
     x : numpy.ndarray
         Input tensor as a NumPy array of shape `(C, N, L)` where `C` is `channels`.
@@ -184,7 +184,7 @@ def make_h5_collate_fn(
         RNG used to sample smoothing noise. If None, a new default generator
         is created. Default: None.
 
-    Returns
+    Return
     -------
     collate_fn : Callable
         A function compatible with PyTorch DataLoader that maps
@@ -295,7 +295,7 @@ def build_dataloaders_from_h5(
         Number of batches prefetched by each worker. Must be a positive
         integer. Applied only when `num_workers > 0`. Default: 2.
 
-    Returns
+    Return
     -------
     train_loader : torch.utils.data.DataLoader
         Training loader built from the training subset. Uses `shuffle=True` and

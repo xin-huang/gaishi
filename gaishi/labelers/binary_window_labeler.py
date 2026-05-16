@@ -43,7 +43,7 @@ class BinaryWindowLabeler(GenericLabeler):
         non_intro_prop: float,
     ):
         """
-        Initializes a new instance of BinaryWindowLabeler with specific parameters.
+        Initialize a new instance of BinaryWindowLabeler with specific parameters.
 
         Parameters
         ----------
@@ -119,7 +119,7 @@ class BinaryWindowLabeler(GenericLabeler):
         rep : int or None, optional
             Used to specify the replicate number for the simulated data.
 
-        Returns
+        Return
         -------
         list[dict[str, Any]]
             A list of dictionaries containing the label for each samples.

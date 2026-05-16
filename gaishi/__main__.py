@@ -38,10 +38,10 @@ def _set_sigpipe_handler() -> None:
 
 def _gaishi_cli_parser() -> argparse.ArgumentParser:
     """
-    Initializes and configures the command-line interface parser
+    Initialize and configure the command-line interface parser
     for gaishi.
 
-    Returns
+    Return
     -------
     top_parser : argparse.ArgumentParser
         A configured command-line interface parser.

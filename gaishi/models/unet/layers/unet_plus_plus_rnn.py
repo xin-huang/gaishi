@@ -104,7 +104,7 @@ class UNetPlusPlusRNN(nn.Module):
             - `x[:, 0:2]`: convolutional channels for UNet++.
             - `x[:, 2:4]`: neighbor-gap channels (gap_to_prev, gap_to_next).
 
-        Returns
+        Return
         -------
         torch.Tensor
             Output tensor of shape `(B, H, W)`.

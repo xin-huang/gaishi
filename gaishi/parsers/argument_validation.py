@@ -22,14 +22,14 @@ import argparse, os
 
 def positive_int(value: str) -> int:
     """
-    Validates if the provided string represents a positive integer.
+    Validate if the provided string represents a positive integer.
 
     Parameters
     ----------
     value : str
         The value to validate.
 
-    Returns
+    Return
     -------
     int
         The validated positive integer.
@@ -52,14 +52,14 @@ def positive_int(value: str) -> int:
 
 def positive_number(value: str) -> float:
     """
-    Validates if the provided string represents a positive number.
+    Validate if the provided string represents a positive number.
 
     Parameters
     ----------
     value : str
         The value to validate.
 
-    Returns
+    Return
     -------
     float
         The validated positive number.
@@ -82,14 +82,14 @@ def positive_number(value: str) -> float:
 
 def existed_file(value: str) -> str:
     """
-    Validates if the provided string is a path to an existing file.
+    Validate if the provided string is a path to an existing file.
 
     Parameters
     ----------
     value : str
         The path to validate.
 
-    Returns
+    Return
     -------
     str
         The validated file path.

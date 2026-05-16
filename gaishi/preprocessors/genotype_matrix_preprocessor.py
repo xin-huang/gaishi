@@ -107,7 +107,7 @@ class GenotypeMatrixPreprocessor(GenericPreprocessor):
         pos_idx : list
             List of position indices corresponding to the genomic window.
 
-        Returns
+        Return
         -------
         list[dict[str, Any]]
             A list of dictionaries with the formatted data for the genomic window.
@@ -185,7 +185,7 @@ class GenotypeMatrixPreprocessor(GenericPreprocessor):
         metric : str, optional
             Distance metric to use. Default: 'euclidean'.
 
-        Returns
+        Return
         -------
         tuple[np.ndarray, list]
             A tuple containing the sorted reference genotypes array and the reordered list of sample identifiers.
@@ -222,7 +222,7 @@ class GenotypeMatrixPreprocessor(GenericPreprocessor):
         metric : str, optional
             Distance metric to use. Default: 'cityblock'.
 
-        Returns
+        Return
         -------
         tuple[np.ndarray, list]
             A tuple containing the sorted target genotypes array and the reordered list of sample identifiers.

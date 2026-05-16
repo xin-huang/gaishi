@@ -85,7 +85,7 @@ class FeatureConfig(
         cls, v: Dict[str, Union[bool, Dict[str, Union[bool, int]]]]
     ):
         """
-        Validates top-level features and dispatch to per-feature checks.
+        Validate top-level features and dispatch to per-feature checks.
 
         Parameters
         ----------
@@ -93,7 +93,7 @@ class FeatureConfig(
             The parsed feature configuration mapping feature names to either
             booleans (for simple toggles) or dictionaries (for nested options).
 
-        Returns
+        Return
         -------
         dict
             The validated configuration (unchanged).
@@ -133,7 +133,7 @@ class FeatureConfig(
     @staticmethod
     def valid_dist(feat_name: str, params: Dict[str, Union[bool, int]]):
         """
-        Validates distance-statistics options for `ref_dist`/`tgt_dist`.
+        Validate distance-statistics options for `ref_dist`/`tgt_dist`.
 
         Parameters
         ----------
@@ -168,7 +168,7 @@ class FeatureConfig(
     @staticmethod
     def valid_sstar(feat_name: str, params: Dict[str, Union[bool, int]]):
         """
-        Validates S* (sstar) parameter options.
+        Validate S* (sstar) parameter options.
 
         Parameters
         ----------

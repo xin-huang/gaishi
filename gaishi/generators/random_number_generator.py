@@ -23,13 +23,13 @@ from gaishi.generators import GenericGenerator
 
 class RandomNumberGenerator(GenericGenerator):
     """
-    Generates random numbers based on specified parameters.
+    Generate random numbers based on specified parameters.
 
     """
 
     def __init__(self, nrep: int, start_rep: int = 0, seed: int = None):
         """
-        Initializes a new instance of RandomNumberGenerator.
+        Initialize a new instance of RandomNumberGenerator.
 
         Parameters
         ----------

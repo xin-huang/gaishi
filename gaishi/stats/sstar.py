@@ -29,7 +29,7 @@ class Sstar(GenericStatistic):
     """
     S* (Sstar) statistic.
 
-    Computes haplotype-based S* scores per individual from a target genotype
+    Compute haplotype-based S* scores per individual from a target genotype
     matrix and variant positions. This implementation removes singletons,
     builds a physical-distance matrix and a genotype-distance matrix (L1),
     then performs dynamic programming to find the best-scoring chain.
@@ -40,7 +40,7 @@ class Sstar(GenericStatistic):
         **kwargs,
     ) -> Dict[str, Any]:
         """
-        Computes S* scores for each target sample (column).
+        Compute S* scores for each target sample (column).
 
         Parameters
         ----------
@@ -56,7 +56,7 @@ class Sstar(GenericStatistic):
             mismatch_penalty : int, default -10000
                 Penalty applied when 0 < genotype distance ≤ max_mismatch.
 
-        Returns
+        Return
         -------
         dict
             {'sstar': list[float]} — per-sample S* scores.
@@ -108,7 +108,7 @@ class Sstar(GenericStatistic):
         mismatch_penalty : int, optional
             Penalty for 0 < gd ≤ max_mismatch; pairs with gd > max_mismatch are invalid. Default: -10000.
 
-        Returns
+        Return
         -------
         list[float]
             Per-sample S* scores.

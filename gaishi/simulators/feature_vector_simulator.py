@@ -56,7 +56,7 @@ class FeatureVectorSimulator(GenericSimulator):
         feature_config_file: str,
     ):
         """
-        Initializes a new instance of LRTrainingDataSimulator with specific parameters.
+        Initialize a new instance of LRTrainingDataSimulator with specific parameters.
 
         Parameters
         ----------
@@ -146,7 +146,7 @@ class FeatureVectorSimulator(GenericSimulator):
         seed : int, optional
             Seed for the random number generator to ensure reproducibility of the simulation. Default: None.
 
-        Returns
+        Return
         -------
         list[dic[str, Any]]
             A list of dictionaries, each representing a merged record containing both feature vectors and labels

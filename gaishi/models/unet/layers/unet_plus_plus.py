@@ -42,7 +42,7 @@ class UNetPlusPlus(nn.Module):
     input_channels : int,
         Number of input channels.
 
-    Returns
+    Return
     -------
     torch.Tensor
         Model output logits `(B, num_classes, H, W)`.
@@ -127,7 +127,7 @@ class UNetPlusPlus(nn.Module):
         x : torch.Tensor
             Input tensor of shape `(B, input_channels, H, W)`.
 
-        Returns
+        Return
         -------
         torch.Tensor
             Output logits `(B, num_classes, H, W)`.

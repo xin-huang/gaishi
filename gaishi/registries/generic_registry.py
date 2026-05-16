@@ -41,7 +41,7 @@ class GenericRegistry(ABC):
         name : str
             The key under which the component is registered.
 
-        Returns
+        Return
         -------
         Callable
             A decorator that registers the class/function.
@@ -67,7 +67,7 @@ class GenericRegistry(ABC):
         name : str
             The key of the registered component.
 
-        Returns
+        Return
         -------
         Any
             The registered component.
@@ -80,7 +80,7 @@ class GenericRegistry(ABC):
         """
         Lists all registered component names.
 
-        Returns
+        Return
         -------
         list of str
             Names of all registered components.
