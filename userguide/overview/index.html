@@ -8,22 +8,24 @@
       
       
       
-        <link rel="canonical" href="https://xin-huang.github.io/gaishi/userguide/eval/">
+        <link rel="canonical" href="https://xin-huang.github.io/gaishi/userguide/overview/">
       
       
-        <link rel="prev" href="../unet/">
+        <link rel="prev" href="../..">
       
+      
+        <link rel="next" href="../configuration/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Performance - gaishi</title>
+        <title>Overview - gaishi</title>
       
     
     
@@ -71,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#overview" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -103,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Performance
+              Overview
             
           </span>
         </div>
@@ -296,62 +303,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../lr/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Logistic Regression
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../unet/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    U-Net
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -361,6 +312,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -369,7 +322,7 @@
   <span class="md-ellipsis">
     
   
-    Performance
+    Overview
   
 
     
@@ -379,6 +332,90 @@
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    train
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    infer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -408,6 +445,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -424,9 +463,23 @@
 
 
 
-  <h1>Performance</h1>
+<h1 id="overview">Overview</h1>
+<p><code>gaishi</code> uses simulated training data and machine learning models to detect introgressed sites or haplotypes.</p>
+<p>There are two subcommands in <code>gaishi</code>:</p>
+<ul>
+<li><code>train</code></li>
+<li><code>infer</code></li>
+</ul>
+<p>To display help information for each subcommand, users can use:</p>
+<div class="codehilite"><pre><span></span><code>gaishi subcommand -h
+</code></pre></div>
 
+<p>For example:</p>
+<div class="codehilite"><pre><span></span><code>gaishi train -h
+</code></pre></div>
 
+<p><strong>Note:</strong> In this manual, we define the population without introgressed fragments as the <strong>reference population</strong>, the population receiving introgressed fragments as the <strong>target population</strong>, and the population donating introgressed fragments as the <strong>source population</strong>.</p>
+<p>The example commands assume that users have cloned the <code>gaishi</code> GitHub repository and run the commands from the root directory of the repository.</p>
 
 
 

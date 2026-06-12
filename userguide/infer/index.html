@@ -8,24 +8,22 @@
       
       
       
-        <link rel="canonical" href="https://xin-huang.github.io/gaishi/userguide/unet/">
+        <link rel="canonical" href="https://xin-huang.github.io/gaishi/userguide/infer/">
       
       
-        <link rel="prev" href="../lr/">
+        <link rel="prev" href="../train/">
       
-      
-        <link rel="next" href="../eval/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>U-Net - gaishi</title>
+        <title>infer - gaishi</title>
       
     
     
@@ -73,6 +71,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#run-inference" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -105,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              U-Net
+              infer
             
           </span>
         </div>
@@ -301,14 +304,70 @@
   
   
     <li class="md-nav__item">
-      <a href="../lr/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Logistic Regression
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    train
   
 
     
@@ -335,6 +394,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    infer
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -343,7 +422,7 @@
   <span class="md-ellipsis">
     
   
-    U-Net
+    infer
   
 
     
@@ -353,34 +432,80 @@
 
       </a>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../eval/" class="md-nav__link">
         
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  <span class="md-ellipsis">
+  
     
   
-    Performance
   
-
-    
-  </span>
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input
+      
+    </span>
+  </a>
   
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feature-vector-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature-vector models
+      
+    </span>
+  </a>
   
-
-      </a>
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unet-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNet++ models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -410,6 +535,71 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feature-vector-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature-vector models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unet-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNet++ models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -426,9 +616,126 @@
 
 
 
-  <h1>U-Net</h1>
+<h1 id="run-inference">Run inference</h1>
+<h3 id="input">Input</h3>
+<p>To run inference, users need to provide:</p>
+<ul>
+<li>a trained model</li>
+<li>a <code>gaishi</code> configuration file in YAML format</li>
+</ul>
+<p>The <code>infer</code> command uses the <code>preprocessing</code> and <code>model</code> blocks in the configuration file.</p>
+<h3 id="feature-vector-models">Feature-vector models</h3>
+<p>Feature-vector inference is used for models trained with:</p>
+<ul>
+<li><code>logistic_regression</code></li>
+<li><code>extra_trees_classifier</code></li>
+</ul>
+<p>Run inference with:</p>
+<div class="codehilite"><pre><span></span><code>gaishi infer \
+    --model examples/results/models/example.lr.joblib \
+    --config examples/configs/lr.config.yaml \
+    --output examples/results/infer/example.lr.pred.tsv
+</code></pre></div>
 
+<h3 id="unet-models">UNet++ models</h3>
+<p>UNet++ inference uses genotype matrices stored in HDF5 format.</p>
+<p>Run inference with:</p>
+<div class="codehilite"><pre><span></span><code>gaishi infer \
+    --model examples/results/models/example.unet.safetensors \
+    --config examples/configs/unet.config.yaml \
+    --output examples/results/infer/example.unet.pred.tsv
+</code></pre></div>
 
+<h3 id="output">Output</h3>
+<p>For feature-vector models, the output table contains one row per window and sample:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Chromosome</code></td>
+<td>Chromosome name.</td>
+</tr>
+<tr>
+<td><code>Start</code></td>
+<td>Window start position.</td>
+</tr>
+<tr>
+<td><code>End</code></td>
+<td>Window end position.</td>
+</tr>
+<tr>
+<td><code>Sample</code></td>
+<td>Target sample or haplotype name.</td>
+</tr>
+<tr>
+<td><code>Non_Intro_Prob</code></td>
+<td>Probability of the non-introgressed class.</td>
+</tr>
+<tr>
+<td><code>Intro_Prob</code></td>
+<td>Probability of the introgressed class.</td>
+</tr>
+</tbody>
+</table>
+<p>For UNet++ models, the output table contains one row per site and sample:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Chromosome</code></td>
+<td>Chromosome name.</td>
+</tr>
+<tr>
+<td><code>Position</code></td>
+<td>Site position.</td>
+</tr>
+<tr>
+<td><code>Sample</code></td>
+<td>Target sample or haplotype name.</td>
+</tr>
+<tr>
+<td><code>Non_Intro_Prob</code></td>
+<td>Probability of the non-introgressed class.</td>
+</tr>
+<tr>
+<td><code>Intro_Prob</code></td>
+<td>Probability of the introgressed class.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="settings">Settings</h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--model</code></td>
+<td>Path to the trained model file.</td>
+</tr>
+<tr>
+<td><code>--config</code></td>
+<td>Path to the <code>gaishi</code> configuration YAML file.</td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td>Path to the inference output file.</td>
+</tr>
+</tbody>
+</table>
 
 
 

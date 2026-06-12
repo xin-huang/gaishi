@@ -8,29 +8,31 @@
       
       
       
-        <link rel="canonical" href="https://xin-huang.github.io/gaishi/">
+        <link rel="canonical" href="https://xin-huang.github.io/gaishi/userguide/train/">
       
       
+        <link rel="prev" href="../configuration/">
       
-        <link rel="next" href="userguide/overview/">
+      
+        <link rel="next" href="../infer/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>gaishi</title>
+        <title>train - gaishi</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +51,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -72,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gaishi" class="md-skip">
+        <a href="#train-models" class="md-skip">
           Skip to content
         </a>
       
@@ -88,7 +90,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="gaishi" class="md-header__button md-logo" aria-label="gaishi" data-md-component="logo">
+    <a href="../.." title="gaishi" class="md-header__button md-logo" aria-label="gaishi" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -108,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              train
             
           </span>
         </div>
@@ -198,7 +200,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="gaishi" class="md-nav__button md-logo" aria-label="gaishi" data-md-component="logo">
+    <a href="../.." title="gaishi" class="md-nav__button md-logo" aria-label="gaishi" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -225,37 +227,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -271,59 +246,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Requirements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#citations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Citations
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -332,18 +254,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -364,7 +288,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -382,7 +306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="userguide/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   
@@ -410,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="userguide/configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -435,10 +359,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="userguide/train/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    train
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -454,6 +405,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feature-vector-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature-vector models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unet-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNet++ models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#only-simulate-training-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Only simulate training data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -466,7 +503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="userguide/infer/" class="md-nav__link">
+      <a href="../infer/" class="md-nav__link">
         
   
   
@@ -521,10 +558,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#input" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        Input
       
     </span>
   </a>
@@ -532,10 +569,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#feature-vector-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Feature-vector models
       
     </span>
   </a>
@@ -543,10 +580,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#citations" class="md-nav__link">
+  <a href="#unet-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Citations
+        UNet++ models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#only-simulate-training-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Only simulate training data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
       
     </span>
   </a>
@@ -570,56 +640,89 @@
 
 
 
-<h1 id="gaishi">gaishi</h1>
-<p><code>gaishi</code> is a Python package for <strong>G</strong>enomic <strong>A</strong>nalysis of <strong>I</strong>ntrogressed-<strong>S</strong>ite and -<strong>H</strong>aplotype <strong>I</strong>dentification using machine learning.</p>
-<p>It supports:</p>
+<h1 id="train-models">Train models</h1>
+<h3 id="input">Input</h3>
+<p>To train a model, users need to provide:</p>
 <ul>
-<li>logistic regression models</li>
-<li>extra-trees classifiers</li>
-<li>UNet++ models</li>
+<li>a demographic model in DEMES format</li>
+<li>a <code>gaishi</code> configuration file in YAML format</li>
 </ul>
-<h3 id="requirements">Requirements</h3>
-<p><code>gaishi</code> works on Unix/Linux operating systems and is tested with the environment in <code>build-env.yaml</code>:</p>
+<p>The configuration file contains three top-level blocks:</p>
 <ul>
-<li>Python 3.9.19</li>
-<li>Python packages:<ul>
-<li>demes=0.2.3</li>
-<li>h5py=3.10.0</li>
-<li>joblib=1.3.2</li>
-<li>msprime=1.3.1</li>
-<li>numpy=1.26.4</li>
-<li>pandas=2.2.1</li>
-<li>pydantic=2.11.7</li>
-<li>pyranges=0.0.129</li>
-<li>pytest=8.1.1</li>
-<li>scikit-allel=1.3.7</li>
-<li>scikit-learn=1.4.1.post1</li>
-<li>scipy=1.12.0</li>
-<li>tskit=0.5.6</li>
-<li>pyyaml=6.0.1</li>
-<li>seriate==1.1.2</li>
-<li>torch==2.2.0</li>
-<li>safetensors==0.4.5</li>
+<li><code>simulation</code></li>
+<li><code>preprocessing</code></li>
+<li><code>model</code></li>
 </ul>
-</li>
+<p>The <code>train</code> command uses the <code>simulation</code> and <code>model</code> blocks.</p>
+<h3 id="feature-vector-models">Feature-vector models</h3>
+<p>Feature-vector training is used for:</p>
+<ul>
+<li><code>logistic_regression</code></li>
+<li><code>extra_trees_classifier</code></li>
 </ul>
-<h3 id="installation">Installation</h3>
-<p>Users can install <code>gaishi</code> with <code>mamba</code>:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/xin-huang/gaishi
-cd gaishi
-mamba env create -f build-env.yaml
-conda activate gaishi
-pip install .
+<p>Run training with:</p>
+<div class="codehilite"><pre><span></span><code>gaishi train \
+    --demes examples/demog/ArchIE_3D19.yaml \
+    --config examples/configs/lr.config.yaml \
+    --output examples/results/models/example.lr.joblib
 </code></pre></div>
 
-<p>To check the installation:</p>
-<div class="codehilite"><pre><span></span><code>gaishi -h
+<p>To train an extra-trees classifier, use the same command with <code>model.name</code> set to <code>extra_trees_classifier</code>.</p>
+<h3 id="unet-models">UNet++ models</h3>
+<p>UNet++ training uses genotype matrices stored in HDF5 format.</p>
+<p>Run training with:</p>
+<div class="codehilite"><pre><span></span><code>gaishi train \
+    --demes examples/demog/ArchIE_3D19.yaml \
+    --config examples/configs/unet.config.yaml \
+    --output examples/results/models/example.unet.safetensors
 </code></pre></div>
 
-<h3 id="citations">Citations</h3>
-<p>If you find <code>gaishi</code> useful, please cite the official repository:</p>
-<div class="codehilite"><pre><span></span><code>https://github.com/xin-huang/gaishi
+<h3 id="only-simulate-training-data">Only simulate training data</h3>
+<p>Users can run simulation without training a model:</p>
+<div class="codehilite"><pre><span></span><code>gaishi train \
+    --demes examples/demog/ArchIE_3D19.yaml \
+    --config examples/configs/lr.config.yaml \
+    --only-simulation
 </code></pre></div>
+
+<h3 id="output">Output</h3>
+<p>For feature-vector models, <code>gaishi train</code> creates:</p>
+<ul>
+<li>a training table: <code>&lt;output_dir&gt;/&lt;output_prefix&gt;.tsv</code></li>
+<li>a trained model file specified by <code>--output</code></li>
+</ul>
+<p>For UNet++ models, <code>gaishi train</code> creates:</p>
+<ul>
+<li>a training HDF5 file: <code>&lt;output_dir&gt;/&lt;output_prefix&gt;.h5</code></li>
+<li>a trained model checkpoint specified by <code>--output</code></li>
+</ul>
+<h3 id="settings">Settings</h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--demes</code></td>
+<td>Path to the DEMES demographic model file.</td>
+</tr>
+<tr>
+<td><code>--config</code></td>
+<td>Path to the <code>gaishi</code> configuration YAML file.</td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td>Path to the trained model output file. Required unless <code>--only-simulation</code> is used.</td>
+</tr>
+<tr>
+<td><code>--only-simulation</code></td>
+<td>Run simulation only and skip model training.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -669,10 +772,10 @@ pip install .
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
       
