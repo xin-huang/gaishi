@@ -644,16 +644,9 @@
 <h3 id="input">Input</h3>
 <p>To train a model, users need to provide:</p>
 <ul>
-<li>a demographic model in DEMES format</li>
-<li>a <code>gaishi</code> configuration file in YAML format</li>
+<li>a demographic model in <a href="https://popsim-consortium.github.io/demes-spec-docs/main/introduction.html">DEMES</a> format</li>
+<li>a <code>GAISHI</code> <a href="https://xin-huang.github.io/gaishi/userguide/configuration/">configuration file</a> in YAML format</li>
 </ul>
-<p>The configuration file contains three top-level blocks:</p>
-<ul>
-<li><code>simulation</code></li>
-<li><code>preprocessing</code></li>
-<li><code>model</code></li>
-</ul>
-<p>The <code>train</code> command uses the <code>simulation</code> and <code>model</code> blocks.</p>
 <h3 id="feature-vector-models">Feature-vector models</h3>
 <p>Feature-vector training is used for:</p>
 <ul>
@@ -664,10 +657,10 @@
 <div class="codehilite"><pre><span></span><code>gaishi train \
     --demes examples/demog/ArchIE_3D19.yaml \
     --config examples/configs/lr.config.yaml \
-    --output examples/results/models/example.lr.joblib
+    --output examples/results/models/example.lr.onnx
 </code></pre></div>
 
-<p>To train an extra-trees classifier, use the same command with <code>model.name</code> set to <code>extra_trees_classifier</code>.</p>
+<p>To train an extra-trees classifier, use the same command with <code>model.name</code> set to <code>extra_trees_classifier</code> in the configuration file.</p>
 <h3 id="unet-models">UNet++ models</h3>
 <p>UNet++ training uses genotype matrices stored in HDF5 format.</p>
 <p>Run training with:</p>
